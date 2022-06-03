@@ -1,0 +1,87 @@
+:root {
+  --dark-blue: #334253;
+  --moderate-blue: #5357B6;
+  --light-grayish-blue: #C5C6EF;
+  --dark-gray: #67727E;
+  --very-light-gray: #F5F6FA;
+  --light-gray: #E9EBF0;
+  --soft-red: #ED6368;
+  --pale-red: #FFB8BB;
+}
+
+*,
+*::after,
+*::before {
+  box-sizing: border-box !important;
+}
+
+body {
+  margin: 0;
+  background-color: #f2f2f2;
+  font-family: 'Rubik', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  padding: 1rem;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+textarea {
+  width: 100%;
+  max-width: 100%;
+  padding: 0.75rem 1.5rem;
+  min-height: 96px;
+  border-radius: 0.5rem;
+  border: 1px solid var(--light-gray);
+  font-size: 1rem;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+textarea:focus {
+  border-color: var(--moderate-blue);
+  outline: none;
+}
+
+textarea::placeholder {
+  font-family: 'Rubik';
+  color: var(--dark-gray);
+}
+
+.form-button {
+  border-radius: 0.5rem;
+  text-transform: uppercase;
+  background-color: var(--moderate-blue);
+  color: white;
+  padding: 0.75rem 1.875rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  box-shadow: none;
+}
+
+.card {
+  padding: 1rem;
+  background-color: white;
+  border-radius: 0.5rem;
+}
+
+@media screen and (min-width: 1024px) {
+  .card {
+    padding: 1.5rem;
+  }
+}
