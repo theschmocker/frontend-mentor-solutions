@@ -3,9 +3,7 @@ import { Comment } from "./components/Comment";
 import styled, { createGlobalStyle } from "styled-components";
 import { mediaQueries } from "./styles/media-queries";
 import { useComments } from "./state/comments";
-import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
-import { useAnimateContext } from "./animate-context";
-import { useLayoutEffect, useState } from "react";
+import { AnimatePresence } from "framer-motion";
 import ExpandAnimation from "./components/ExpandAnimation";
 
 function App() {
