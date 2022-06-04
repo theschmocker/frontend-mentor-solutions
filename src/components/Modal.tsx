@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import { DetailedHTMLProps, HTMLAttributes, KeyboardEventHandler, ReactNode, useEffect } from "react";
 import FocusLock from "react-focus-lock";
 import { mediaQueries } from "../styles/media-queries";
+import { AnimatePresence, motion } from "framer-motion";
 
 const modalOutlet = document.querySelector<HTMLElement>("#modal-outlet");
 
@@ -41,9 +42,10 @@ type Props = Omit<
 > & {
 	children: ReactNode;
 	onClose?: () => void;
+	show: boolean;
 };
 
-export default function Modal({ children, onClose, ...props }: Props) {
+export default function Modal({ show, children, onClose, ...props }: Props) {
 	useEffect(() => {
 		const previouslyFocused = document.activeElement as HTMLElement;
 		const scrollY = window.scrollY;
@@ -75,14 +77,75 @@ export default function Modal({ children, onClose, ...props }: Props) {
 	}
 
 	return createPortal(
-		<StyledModal {...props} onKeyDown={handleKeyDown}>
-			<div className="backdrop" onClick={onClose} />
-			<FocusLock>
-				<div className="content" role="dialog" aria-modal="true">
-					{children}
-				</div>
-			</FocusLock>
-		</StyledModal>,
+		<div style={{ pointerEvents: show ? "auto" : "none" }}>
+			<AnimatePresence>
+				{show && (
+					<StyledModal {...props} onKeyDown={handleKeyDown}>
+						<motion.div
+							animate="visible"
+							initial="hidden"
+							exit="exit"
+							variants={{
+								visible: {
+									opacity: 1,
+									transition: {
+										duration: 0.2,
+									},
+								},
+								hidden: {
+									opacity: 0,
+								},
+								exit: {
+									opacity: 0,
+								},
+							}}
+							className="backdrop"
+							onClick={onClose}
+						/>
+						<FocusLock>
+							<motion.div
+								animate="visible"
+								initial="hidden"
+								exit="exit"
+								variants={{
+									visible: {
+										opacity: 1,
+										y: 0,
+										transition: {
+											y: {
+												type: "spring",
+												damping: 9,
+												stiffness: 120,
+												mass: 0.5,
+											},
+										},
+									},
+									hidden: {
+										opacity: 0,
+										y: 75,
+									},
+									exit: {
+										opacity: 0,
+										y: 50,
+										transition: {
+											y: {
+												type: "spring",
+												stiffness: 90,
+											},
+										},
+									},
+								}}
+								className="content"
+								role="dialog"
+								aria-modal="true"
+							>
+								{children}
+							</motion.div>
+						</FocusLock>
+					</StyledModal>
+				)}
+			</AnimatePresence>
+		</div>,
 		modalOutlet
 	);
 }

@@ -3,9 +3,17 @@ import { mediaQueries } from "../styles/media-queries";
 import Button from "./Button";
 import Modal from "./Modal";
 
-export function DeleteCommentModal({ onCancel, onDelete }: { onCancel: () => void; onDelete: () => void }) {
+export function DeleteCommentModal({
+	show,
+	onCancel,
+	onDelete,
+}: {
+	show: boolean;
+	onCancel: () => void;
+	onDelete: () => void;
+}) {
 	return (
-		<Modal onClose={onCancel}>
+		<Modal show={show} onClose={onCancel}>
 			<DeleteModalInner>
 				<DeleteModalTitle>Delete comment</DeleteModalTitle>
 				<DeleteModalContent>

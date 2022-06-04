@@ -96,15 +96,14 @@ export default function CommentCard({ comment, currentUser, onReply, onEdit, onD
 					</button>
 				)}
 			</div>
-			{showDeleteConfirmModal && (
-				<DeleteCommentModal
-					onCancel={() => setShowDeleteConfirmModal(false)}
-					onDelete={() => {
-						onDelete?.();
-						setShowDeleteConfirmModal(false);
-					}}
-				/>
-			)}
+			<DeleteCommentModal
+				show={showDeleteConfirmModal}
+				onCancel={() => setShowDeleteConfirmModal(false)}
+				onDelete={() => {
+					onDelete?.();
+					setShowDeleteConfirmModal(false);
+				}}
+			/>
 		</Root>
 	);
 }
