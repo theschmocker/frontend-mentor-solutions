@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { createPortal } from "react-dom";
-import { DetailedHTMLProps, HTMLAttributes, KeyboardEventHandler, ReactNode, useEffect, useRef } from "react";
+import { DetailedHTMLProps, HTMLAttributes, KeyboardEventHandler, ReactNode, useEffect } from "react";
 import FocusLock from "react-focus-lock";
 import { mediaQueries } from "../styles/media-queries";
 
