@@ -2,16 +2,14 @@ import { useState } from "react";
 import { AddCommentForm } from "./AddCommentForm";
 import CommentCard from "./CommentCard";
 import { Comment as IComment, useComments, User } from "../state/comments";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { mediaQueries } from "../styles/media-queries";
-import { AnimatePresence, motion } from "framer-motion";
-import { useAnimateContext } from "../animate-context";
+import { AnimatePresence } from "framer-motion";
 import ExpandAnimation from "./ExpandAnimation";
 
 export function Comment({ comment, currentUser }: { comment: IComment; currentUser: User }) {
 	const [reply, setReply] = useState(false);
 	const { deleteComment, addComment, updateComment, upvoteComment, downvoteComment } = useComments();
-	const shouldAnimate = useAnimateContext();
 
 	function handleSubmit(content: string) {
 		addComment(content, comment.id);
@@ -19,7 +17,7 @@ export function Comment({ comment, currentUser }: { comment: IComment; currentUs
 	}
 
 	return (
-		<Root className="comment">
+		<Root className="comment" hasChildren={!!comment.replies.length || reply}>
 			<CommentCard
 				comment={comment}
 				currentUser={currentUser}
@@ -51,7 +49,7 @@ export function Comment({ comment, currentUser }: { comment: IComment; currentUs
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-const Root = styled.div`
+const Root = styled.div<{ hasChildren: boolean }>`
 	display: flex;
 	flex-direction: column;
 
@@ -61,23 +59,25 @@ const Root = styled.div`
 		padding-left: 1rem;
 
 		&::before {
+			display: ${props => (props.hasChildren ? "block" : "none")};
 			content: "";
 			position: absolute;
 			top: 1rem;
 			left: 0;
 			bottom: 0;
 			width: 2px;
-			height: 100%;
+			height: calc(100% - 1rem);
 			background-color: var(--light-gray);
 
 			${mediaQueries.large(
 				css => css`
 					top: 1.5rem;
+					height: calc(100% - 1.5rem);
 				`
 			)}
 		}
 
-		comment {
+		.comment {
 			padding-top: 1rem;
 			${mediaQueries.large(
 				css => css`
@@ -104,8 +104,3 @@ const Root = styled.div`
 		}
 	}
 `;
-
-const NestedRootSelected = () =>
-	css`
-		${Root}
-	`;
