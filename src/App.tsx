@@ -7,6 +7,7 @@ import { AnimatePresence } from "framer-motion";
 import ExpandAnimation from "./components/ExpandAnimation";
 import ScreenreaderText from "./components/ScreenreaderText";
 import useNormalizeButtonFocus from "./hooks/normalize-button-focus";
+import { color } from "./styles/theme";
 
 function App() {
 	const { comments, user, addComment } = useComments();
@@ -38,6 +39,8 @@ export default App;
 const Root = styled.main`
 	max-width: 730px;
 	margin: 0 auto;
+
+	padding: 32px 1rem;
 
 	${mediaQueries.medium(
 		css => css`
@@ -74,11 +77,10 @@ const GlobalStyles = createGlobalStyle`
 
 	body {
 		margin: 0;
-		background-color: #f2f2f2;
+		background-color: ${color("verLightGray")};
 		font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
 			"Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
-		/* padding: 1rem; */
 	}
 `;

@@ -76,12 +76,16 @@ const Root = styled.div<{ hasChildren: boolean }>`
 			`
 		)}
 
-		.comment {
+		.comment, .reply-form {
 			padding-top: var(--comment-list-item-spacing);
 		}
 
-		.reply-form {
-			padding-top: var(--comment-list-item-spacing);
+		& > *:not(:first-of-type) > * {
+			${mediaQueries.large(
+				css => css`
+					padding-top: calc(var(--comment-list-item-spacing) + 4px);
+				`
+			)}
 		}
 	}
 `;

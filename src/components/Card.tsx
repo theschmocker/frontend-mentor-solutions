@@ -8,9 +8,7 @@ export default styled.div`
 
 	${mediaQueries.large(
 		css => css`
-			.card {
-				padding: 1.5rem;
-			}
+			padding: 1.5rem;
 		`
 	)}
 `;

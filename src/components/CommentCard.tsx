@@ -202,9 +202,9 @@ const Root = styled(Card)`
 		line-height: 1.5;
 		appearance: none;
 		border: none;
+		font-family: Rubik;
 		background: transparent;
 		cursor: pointer;
-
 		transition: all 0.1s ease-in-out;
 		border-radius: 0.5rem;
 		padding: 0 0.5rem;
@@ -230,6 +230,7 @@ const Root = styled(Card)`
 		color: ${color("moderateBlue")};
 		--hover-background: ${color("moderateBlue")}11;
 		--active-background: ${color("moderateBlue")}33;
+		margin-right: -0.5rem;
 	}
 
 	.comment-card__action--delete {
