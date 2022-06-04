@@ -5,6 +5,7 @@ import { mediaQueries } from "./styles/media-queries";
 import { useComments } from "./state/comments";
 import { AnimatePresence } from "framer-motion";
 import ExpandAnimation from "./components/ExpandAnimation";
+import ScreenreaderText from "./components/ScreenreaderText";
 
 function App() {
 	const { comments, user, addComment } = useComments();
@@ -13,6 +14,7 @@ function App() {
 		<>
 			<GlobalStyles />
 			<Root>
+				<ScreenreaderText as="h1">Interactive comments section</ScreenreaderText>
 				<AnimatePresence>
 					{comments.map(comment => (
 						<ExpandAnimation key={comment.id} k={comment.id}>
