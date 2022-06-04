@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { mediaQueries } from "../styles/media-queries";
+import { color } from "../styles/theme";
 
 export default function CommentCardScore({
 	score,
@@ -26,7 +27,7 @@ const Root = styled.div`
 	align-items: center;
 	justify-self: start;
 	gap: 3px;
-	background-color: var(--very-light-gray);
+	background-color: ${color("verLightGray")};
 	padding: 5px;
 	border-radius: 10px;
 	${mediaQueries.large(
@@ -37,7 +38,7 @@ const Root = styled.div`
 	)}
 
 	.comment-score__value {
-		color: var(--moderate-blue);
+		color: ${color("moderateBlue")};
 		font-weight: 500;
 	}
 
@@ -47,5 +48,11 @@ const Root = styled.div`
 		background: transparent;
 		padding: 10px;
 		cursor: pointer;
+
+		img {
+			width: 11px;
+			height: 11px;
+			object-fit: contain;
+		}
 	}
 `;

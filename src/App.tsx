@@ -56,16 +56,6 @@ const Root = styled.main`
 
 const GlobalStyles = createGlobalStyle`
 	:root {
-		// colors
-		--dark-blue: #334253;
-		--moderate-blue: #5357b6;
-		--light-grayish-blue: #c5c6ef;
-		--dark-gray: #67727e;
-		--very-light-gray: #f5f6fa;
-		--light-gray: #e9ebf0;
-		--soft-red: #ce484d;
-		--pale-red: #ffb8bb;
-
 		// layout
 		--comment-list-item-spacing: 1rem;
 

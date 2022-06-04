@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { mediaQueries } from "../styles/media-queries";
 import { AnimatePresence } from "framer-motion";
 import ExpandAnimation from "./ExpandAnimation";
+import { color } from "../styles/theme";
 
 export function Comment({ comment, currentUser }: { comment: IComment; currentUser: User }) {
 	const [reply, setReply] = useState(false);
@@ -65,7 +66,7 @@ const Root = styled.div<{ hasChildren: boolean }>`
 			bottom: 0;
 			width: 2px;
 			height: calc(100% - var(--comment-list-item-spacing));
-			background-color: var(--light-gray);
+			background-color: ${color("lightGray")};
 		}
 
 		${mediaQueries.large(

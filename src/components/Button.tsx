@@ -1,14 +1,15 @@
 import styled, { css } from "styled-components";
+import { color } from "../styles/theme";
 
 const variants = {
 	primary: css`
-		--button-variant-color: var(--moderate-blue);
+		--button-variant-color: ${color("moderateBlue")};
 	`,
 	danger: css`
-		--button-variant-color: var(--soft-red);
+		--button-variant-color: ${color("softRed")};
 	`,
 	subdued: css`
-		--button-variant-color: var(--dark-gray);
+		--button-variant-color: ${color("darkGray")};
 	`,
 } as const;
 
@@ -45,7 +46,7 @@ export default styled.button<{
 	}
 
 	&:disabled {
-		background-color: var(--light-grayish-blue);
+		background-color: ${color("lightGrayishBlue")};
 		cursor: not-allowed;
 	}
 `;

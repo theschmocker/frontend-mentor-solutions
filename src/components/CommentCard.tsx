@@ -2,6 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import { Comment, User } from "../state/comments";
 import { mediaQueries } from "../styles/media-queries";
+import { color } from "../styles/theme";
 import Card from "./Card";
 import CommentCardScore from "./CommentCardScore";
 import { DeleteCommentModal } from "./DeleteCommentModal";
@@ -145,7 +146,7 @@ const Root = styled(Card)`
 	.comment-card__username {
 		font-weight: 500;
 		line-height: 1.1875;
-		color: var(--dark-blue);
+		color: ${color("darkBlue")};
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
@@ -154,7 +155,7 @@ const Root = styled(Card)`
 	.comment-card__you-badge {
 		border-radius: 2px;
 		padding: 1px 6px 3px 6px;
-		background-color: var(--moderate-blue);
+		background-color: ${color("moderateBlue")};
 		color: white;
 		font-size: 0.8125rem;
 		line-height: 1.18;
@@ -162,7 +163,7 @@ const Root = styled(Card)`
 
 	.comment-card__created-at {
 		line-height: 1.5;
-		color: var(--dark-gray);
+		color: ${color("darkGray")};
 	}
 
 	.comment-card__content {
@@ -172,11 +173,11 @@ const Root = styled(Card)`
 		font-weight: 400;
 		font-size: 16px;
 		line-height: 1.5;
-		color: var(--dark-gray);
+		color: ${color("darkGray")};
 	}
 
 	.comment-card__tag {
-		color: var(--moderate-blue);
+		color: ${color("moderateBlue")};
 		font-weight: 500;
 	}
 
@@ -195,7 +196,7 @@ const Root = styled(Card)`
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
-		color: var(--moderate-blue);
+		color: ${color("moderateBlue")};
 		font-weight: 500;
 		font-size: 1rem;
 		line-height: 1.5;
@@ -203,13 +204,19 @@ const Root = styled(Card)`
 		border: none;
 		background: transparent;
 		cursor: pointer;
+
+		img {
+			width: 14px;
+			height: 14px;
+			object-fit: contain;
+		}
 	}
 
 	.comment-card__action--primary {
-		color: var(--moderate-blue);
+		color: ${color("moderateBlue")};
 	}
 
 	.comment-card__action--delete {
-		color: var(--soft-red);
+		color: ${color("softRed")};
 	}
 `;

@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { mediaQueries } from "../styles/media-queries";
+import { color } from "../styles/theme";
 import Button from "./Button";
 import Modal from "./Modal";
 
@@ -36,14 +37,14 @@ const DeleteModalTitle = styled.h2`
 	font-size: 1.25rem;
 	font-weight: 500;
 	line-height: 1.185;
-	color: var(--dark-blue);
+	color: ${color("darkBlue")};
 	margin: 0;
 `;
 
 const DeleteModalContent = styled.p`
 	font-size: 1rem;
 	line-height: 1.5;
-	color: var(--dark-gray);
+	color: ${color("darkGray")};
 	margin: 1rem 0;
 
 	${mediaQueries.large(
