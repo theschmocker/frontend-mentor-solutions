@@ -1,6 +1,14 @@
 import styled from "styled-components";
 import { createPortal } from "react-dom";
-import { DetailedHTMLProps, HTMLAttributes, KeyboardEventHandler, ReactNode, useEffect } from "react";
+import {
+	DetailedHTMLProps,
+	HTMLAttributes,
+	KeyboardEventHandler,
+	ReactNode,
+	useEffect,
+	useLayoutEffect,
+	useState,
+} from "react";
 import FocusLock from "react-focus-lock";
 import { mediaQueries } from "../styles/media-queries";
 import { AnimatePresence, motion } from "framer-motion";
@@ -46,63 +54,49 @@ type Props = Omit<
 };
 
 export default function Modal({ show, children, onClose, ...props }: Props) {
-	useEffect(() => {
-		const previouslyFocused = document.activeElement as HTMLElement;
-		const scrollY = window.scrollY;
-		document.body.style.setProperty("position", "fixed");
-		document.body.style.setProperty("top", `-${scrollY}px`);
-		document.body.style.setProperty("left", "0");
-		document.body.style.setProperty("right", "0");
-		document.body.style.setProperty("overflowY", "hidden");
-
-		return () => {
-			document.body.style.setProperty("position", null);
-			document.body.style.setProperty("top", null);
-			document.body.style.setProperty("left", null);
-			document.body.style.setProperty("right", null);
-			document.body.style.setProperty("overflowY", null);
-			window.scrollTo({ top: scrollY });
-			previouslyFocused.focus?.();
-		};
-	}, []);
-
 	const handleKeyDown: KeyboardEventHandler = e => {
 		if (e.key === "Escape") {
 			onClose?.();
 		}
 	};
 
+	// need this to make sure that FocusLock grabs the active element _before_ trapping is enabled
+	// and focus has already moved into the modal
+	const [showModal, setShowModal] = useState(show);
+	useLayoutEffect(() => setShowModal(show), [show]);
+
 	if (!modalOutlet) {
 		throw new Error("modal outlet missing from document");
 	}
 
 	return createPortal(
-		<div style={{ pointerEvents: show ? "auto" : "none" }}>
-			<AnimatePresence>
-				{show && (
-					<StyledModal {...props} onKeyDown={handleKeyDown}>
-						<motion.div
-							animate="visible"
-							initial="hidden"
-							exit="exit"
-							variants={{
-								visible: {
-									opacity: 1,
-									transition: {
-										duration: 0.2,
+		<FocusLock returnFocus disabled={!show}>
+			<div style={{ pointerEvents: show ? "auto" : "none" }}>
+				{show && <BodyScrollLocker />}
+				<AnimatePresence>
+					{showModal && (
+						<StyledModal {...props} onKeyDown={handleKeyDown}>
+							<motion.div
+								animate="visible"
+								initial="hidden"
+								exit="exit"
+								variants={{
+									visible: {
+										opacity: 1,
+										transition: {
+											duration: 0.2,
+										},
 									},
-								},
-								hidden: {
-									opacity: 0,
-								},
-								exit: {
-									opacity: 0,
-								},
-							}}
-							className="backdrop"
-							onClick={onClose}
-						/>
-						<FocusLock>
+									hidden: {
+										opacity: 0,
+									},
+									exit: {
+										opacity: 0,
+									},
+								}}
+								className="backdrop"
+								onClick={onClose}
+							/>
 							<motion.div
 								animate="visible"
 								initial="hidden"
@@ -141,11 +135,33 @@ export default function Modal({ show, children, onClose, ...props }: Props) {
 							>
 								{children}
 							</motion.div>
-						</FocusLock>
-					</StyledModal>
-				)}
-			</AnimatePresence>
-		</div>,
+						</StyledModal>
+					)}
+				</AnimatePresence>
+			</div>
+		</FocusLock>,
 		modalOutlet
 	);
+}
+
+function BodyScrollLocker() {
+	useEffect(() => {
+		const scrollY = window.scrollY;
+		document.body.style.setProperty("position", "fixed");
+		document.body.style.setProperty("top", `-${scrollY}px`);
+		document.body.style.setProperty("left", "0");
+		document.body.style.setProperty("right", "0");
+		document.body.style.setProperty("overflowY", "hidden");
+
+		return () => {
+			document.body.style.setProperty("position", null);
+			document.body.style.setProperty("top", null);
+			document.body.style.setProperty("left", null);
+			document.body.style.setProperty("right", null);
+			document.body.style.setProperty("overflowY", null);
+			window.scrollTo({ top: scrollY });
+		};
+	}, []);
+
+	return null;
 }
