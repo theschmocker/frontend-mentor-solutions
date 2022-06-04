@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import Button from "./Button";
 import Card from "./Card";
 import { User } from "../state/comments";
