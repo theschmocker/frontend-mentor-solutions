@@ -1,5 +1,9 @@
+import { useState } from "react";
+import styled from "styled-components";
 import { Comment, User } from "../hooks/comments";
+import Button from "./Button";
 import "./CommentCard.css";
+import Modal from "./Modal";
 
 interface Props {
 	comment: Comment;
@@ -11,6 +15,9 @@ interface Props {
 
 export default function CommentCard({ comment, currentUser, onReply, onEdit, onDelete }: Props) {
 	const isCurrentUser = currentUser.username === comment.user.username;
+
+	const [showDeleteConfirmModal, setShowDeleteConfirmModal] = useState(false);
+
 	return (
 		<div className="card comment-card">
 			<div className="comment-card__header">
@@ -33,7 +40,10 @@ export default function CommentCard({ comment, currentUser, onReply, onEdit, onD
 			<div className="comment-card__actions">
 				{isCurrentUser ? (
 					<>
-						<button className="comment-card__action comment-card__action--delete" onClick={onDelete}>
+						<button
+							className="comment-card__action comment-card__action--delete"
+							onClick={() => setShowDeleteConfirmModal(true)}
+						>
 							<img src="/images/icon-delete.svg" alt="" />
 							Delete
 						</button>
@@ -49,6 +59,31 @@ export default function CommentCard({ comment, currentUser, onReply, onEdit, onD
 					</button>
 				)}
 			</div>
+			{showDeleteConfirmModal && (
+				<Modal onClose={() => setShowDeleteConfirmModal(false)}>
+					<DeleteModalInner>
+						<DeleteModalTitle>Delete comment</DeleteModalTitle>
+						<DeleteModalContent>
+							Are you sure you want to delete this comment? This will remove the comment and can’t be undone.
+						</DeleteModalContent>
+						<DeleteModalActions>
+							<Button variant="subdued" padding="small" onClick={() => setShowDeleteConfirmModal(false)}>
+								No, cancel
+							</Button>
+							<Button
+								variant="danger"
+								padding="small"
+								onClick={() => {
+									onDelete?.();
+									setShowDeleteConfirmModal(false);
+								}}
+							>
+								Yes, delete
+							</Button>
+						</DeleteModalActions>
+					</DeleteModalInner>
+				</Modal>
+			)}
 		</div>
 	);
 }
@@ -66,3 +101,39 @@ function CommentScore({ score, onChange }: { score: number; onChange?: (dir: "up
 		</div>
 	);
 }
+
+const DeleteModalTitle = styled.h2`
+	font-size: 1.25rem;
+	font-weight: 500;
+	line-height: 1.185;
+	color: var(--dark-blue);
+	margin: 0;
+`;
+
+const DeleteModalContent = styled.p`
+	font-size: 1rem;
+	line-height: 1.5;
+	color: var(--dark-gray);
+	margin: 1rem 0;
+
+	@media screen and (min-width: 1024px) {
+		margin: 1.25rem 0;
+	}
+`;
+
+const DeleteModalActions = styled.div`
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.75rem;
+	& > * {
+		flex: 1 0 auto;
+	}
+
+	@media screen and (min-width: 1024px) {
+		gap: 0.875rem;
+	}
+`;
+
+const DeleteModalInner = styled.div`
+	max-width: 336px;
+`;

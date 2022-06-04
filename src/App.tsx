@@ -1,6 +1,8 @@
 import { useId, useState } from "react";
 import "./App.css";
+import Button from "./components/Button";
 import CommentCard from "./components/CommentCard";
+import Modal from "./components/Modal";
 import { Comment as IComment, useComments, User } from "./hooks/comments";
 
 function App() {
@@ -89,9 +91,9 @@ function AddCommentForm({ user, onSubmit }: { user: User; onSubmit: (content: st
 					onChange={e => setContent(e.target.value)}
 				></textarea>
 			</label>
-			<button className="add-comment__send form-button" disabled={!trimmed}>
+			<Button className="add-comment__send" disabled={!trimmed}>
 				Send
-			</button>
+			</Button>
 		</form>
 	);
 }
