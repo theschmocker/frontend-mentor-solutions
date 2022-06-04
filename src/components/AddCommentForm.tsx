@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Button from "./Button";
 import Card from "./Card";
 import { User } from "../state/comments";
@@ -6,12 +6,12 @@ import styled from "styled-components";
 import { mediaQueries } from "../styles/media-queries";
 import ScreenreaderText from "./ScreenreaderText";
 import CommentField from "./CommentField";
-import { elementIsInViewport } from "../util/viewport";
+import { useAutoFocus } from "../hooks/auto-focus";
 
 export function AddCommentForm({
 	user,
 	onSubmit,
-	autoFocus,
+	autoFocus = false,
 }: {
 	user: User;
 	onSubmit: (content: string) => void | Promise<void>;
@@ -30,22 +30,7 @@ export function AddCommentForm({
 		setContent("");
 	}
 
-	const textarea = useRef<HTMLTextAreaElement | null>(null);
-	const form = useRef<HTMLFormElement | null>(null);
-
-	useEffect(() => {
-		if (autoFocus && textarea.current && form.current) {
-			textarea.current.focus({ preventScroll: true });
-
-			if (!elementIsInViewport(form.current)) {
-				// for some reason I couldn't determine, behavior: smooth doesn't work unless scrollIntoView is queued at the end
-				// of the event loop. behavior: auto doesn't have this issue. I thought maybe useLayoutEffect would help, but no dice
-				setTimeout(() => {
-					form.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
-				}, 0);
-			}
-		}
-	}, [autoFocus]);
+	const [textarea, form] = useAutoFocus<HTMLTextAreaElement, HTMLFormElement>(autoFocus);
 
 	return (
 		<Root as="form" className="add-comment" onSubmit={handleSubmit} ref={form}>

@@ -1,5 +1,6 @@
-import { FormEventHandler, useState } from "react";
+import { FormEventHandler, useRef, useState } from "react";
 import styled from "styled-components";
+import { useAutoFocus } from "../hooks/auto-focus";
 import Button from "./Button";
 import CommentField from "./CommentField";
 
@@ -22,9 +23,11 @@ export default function EditCommentForm({
 		onSubmit?.(trimmed);
 	};
 
+	const [textarea, form] = useAutoFocus<HTMLTextAreaElement, HTMLFormElement>();
+
 	return (
-		<Form onSubmit={handleSubmit}>
-			<CommentField value={editedContent} onChange={e => setEditedContent(e.target.value)} />
+		<Form onSubmit={handleSubmit} ref={form}>
+			<CommentField value={editedContent} onChange={e => setEditedContent(e.target.value)} ref={textarea} />
 			<Button disabled={editedContent === content || !trimmed}>Update</Button>
 		</Form>
 	);
@@ -35,4 +38,5 @@ const Form = styled.form`
 	flex-direction: column;
 	align-items: flex-end;
 	gap: 1rem;
+	scroll-margin: 100px;
 `;
