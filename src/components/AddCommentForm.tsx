@@ -1,4 +1,3 @@
-/* eslint-disable indent */
 import { useState } from "react";
 import Button from "./Button";
 import Card from "./Card";

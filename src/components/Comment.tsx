@@ -1,4 +1,3 @@
-/* eslint-disable indent */
 import { useState } from "react";
 import { AddCommentForm } from "./AddCommentForm";
 import CommentCard from "./CommentCard";

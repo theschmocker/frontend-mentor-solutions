@@ -1,5 +1,3 @@
-/* eslint-disable indent */
-/** pre */
 import styled from "styled-components";
 import { createPortal } from "react-dom";
 import { DetailedHTMLProps, HTMLAttributes, KeyboardEventHandler, ReactNode, useEffect, useRef } from "react";

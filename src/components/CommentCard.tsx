@@ -1,4 +1,3 @@
-/* eslint-disable indent */
 import { useState } from "react";
 import styled from "styled-components";
 import { Comment, User } from "../state/comments";
