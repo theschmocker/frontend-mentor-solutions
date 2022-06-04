@@ -60,7 +60,7 @@ const GlobalStyles = createGlobalStyle`
 		--dark-gray: #67727e;
 		--very-light-gray: #f5f6fa;
 		--light-gray: #e9ebf0;
-		--soft-red: #ed6368;
+		--soft-red: #ce484d;
 		--pale-red: #ffb8bb;
 
 		// layout
