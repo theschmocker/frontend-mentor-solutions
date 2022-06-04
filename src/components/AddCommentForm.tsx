@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Button from "./Button";
 import Card from "./Card";
-import { User } from "../hooks/comments";
+import { User } from "../state/comments";
 import styled from "styled-components";
 import { mediaQueries } from "../styles/media-queries";
 import ScreenreaderText from "./ScreenreaderText";

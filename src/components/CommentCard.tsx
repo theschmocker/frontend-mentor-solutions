@@ -1,6 +1,7 @@
+/* eslint-disable indent */
 import { useState } from "react";
 import styled from "styled-components";
-import { Comment, User } from "../hooks/comments";
+import { Comment, User } from "../state/comments";
 import { mediaQueries } from "../styles/media-queries";
 import Card from "./Card";
 import CommentCardScore from "./CommentCardScore";
@@ -13,13 +14,27 @@ interface Props {
 	onReply?: () => void;
 	onEdit: (content: string) => void;
 	onDelete?: () => void;
+	onUpvote?: () => void;
+	onDownvote?: () => void;
 }
 
-export default function CommentCard({ comment, currentUser, onReply, onEdit, onDelete }: Props) {
+export default function CommentCard({ comment, currentUser, onReply, onEdit, onDelete, onUpvote, onDownvote }: Props) {
 	const isCurrentUser = currentUser.username === comment.user.username;
 
 	const [showDeleteConfirmModal, setShowDeleteConfirmModal] = useState(false);
 	const [editComment, setEditComment] = useState(false);
+
+	function handleScoreChange(direction: "up" | "down") {
+		switch (direction) {
+			case "up":
+				onUpvote?.();
+				break;
+
+			case "down":
+				onDownvote?.();
+				break;
+		}
+	}
 
 	return (
 		<Root>
@@ -51,7 +66,7 @@ export default function CommentCard({ comment, currentUser, onReply, onEdit, onD
 			</div>
 
 			<div className="comment-card__score">
-				<CommentCardScore score={comment.score} />
+				<CommentCardScore score={comment.score} onChange={handleScoreChange} />
 			</div>
 
 			<div className="comment-card__actions">

@@ -1,10 +1,27 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import data from "../data.json";
-import { useMounted } from "./mounted";
+import { useMounted } from "../hooks/mounted";
 
 const user = data.currentUser as User;
 
-export function useComments(storage: Storage = localStorage) {
+const CommentsContext = createContext<ReturnType<typeof useCommentsData> | null>(null);
+
+export function CommentsProvider({ children }: { children: ReactNode }) {
+	const comments = useCommentsData();
+	return <CommentsContext.Provider value={comments}>{children}</CommentsContext.Provider>;
+}
+
+export function useComments() {
+	const comments = useContext(CommentsContext);
+
+	if (comments == null) {
+		throw new Error("CommentsProvider not found higer in the component tree");
+	}
+
+	return comments;
+}
+
+function useCommentsData(storage: Storage = localStorage) {
 	const [commentsMap, setCommentsMap] = useState<Map<number, Comment>>(new Map());
 
 	const allComments = useMemo(() => Array.from(commentsMap.values()), [commentsMap]);
@@ -43,6 +60,16 @@ export function useComments(storage: Storage = localStorage) {
 		updateComments(newComments);
 	}
 
+	function upvoteComment(id: number) {
+		const newComments = allComments.map(c => (c.id !== id ? c : { ...c, score: c.score + 1 }));
+		updateComments(newComments);
+	}
+
+	function downvoteComment(id: number) {
+		const newComments = allComments.map(c => (c.id !== id ? c : { ...c, score: c.score - 1 }));
+		updateComments(newComments);
+	}
+
 	const loadFromLocalStorage = useCallback(() => {
 		try {
 			const stored = JSON.parse(storage.getItem("fementor_comments") ?? "null");
@@ -71,6 +98,8 @@ export function useComments(storage: Storage = localStorage) {
 		addComment,
 		deleteComment,
 		updateComment,
+		upvoteComment,
+		downvoteComment,
 	};
 }
 

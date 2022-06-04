@@ -1,24 +1,17 @@
 import { AddCommentForm } from "./components/AddCommentForm";
-import { useComments } from "./hooks/comments";
 import { Comment } from "./components/Comment";
 import styled, { createGlobalStyle } from "styled-components";
 import { mediaQueries } from "./styles/media-queries";
+import { useComments } from "./state/comments";
 
 function App() {
-	const { comments, user, addComment, deleteComment, updateComment } = useComments();
+	const { comments, user, addComment } = useComments();
 	return (
 		<>
 			<GlobalStyles />
 			<Root>
 				{Object.entries(comments).map(([id, comment]) => (
-					<Comment
-						key={id}
-						comment={comment}
-						currentUser={user}
-						onDelete={deleteComment}
-						onReply={addComment}
-						onEdit={content => updateComment(comment.id, content)}
-					/>
+					<Comment key={id} comment={comment} currentUser={user} />
 				))}
 				<AddCommentForm user={user} onSubmit={addComment} />
 			</Root>

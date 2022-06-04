@@ -6,15 +6,15 @@ export default function CommentCardScore({
 	onChange,
 }: {
 	score: number;
-	onChange?: (dir: "up" | "down") => void;
+	onChange: (dir: "up" | "down") => void;
 }) {
 	return (
 		<Root>
-			<button className="comment-score__button">
+			<button className="comment-score__button" onClick={() => onChange("up")}>
 				<img src="/images/icon-plus.svg" alt="" />
 			</button>
 			<span className="comment-score__value">{score}</span>
-			<button className="comment-score__button">
+			<button className="comment-score__button" onClick={() => onChange("down")}>
 				<img src="/images/icon-minus.svg" alt="" />
 			</button>
 		</Root>
