@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import data from "../data.json";
+import { useMounted } from "./mounted";
+
+const user = data.currentUser as User;
 
 export function useComments(storage: Storage = localStorage) {
 	const [commentsMap, setCommentsMap] = useState<Map<number, Comment>>(new Map());
-	const [user, setUser] = useState<User>(data.currentUser);
 
 	const allComments = useMemo(() => Array.from(commentsMap.values()), [commentsMap]);
 	const topLevelComments = useMemo(() => allComments.filter(c => !c.parentCommentId), [allComments]);
@@ -33,11 +35,15 @@ export function useComments(storage: Storage = localStorage) {
 
 	function deleteComment(id: number) {
 		const newComments = allComments.filter(c => c.id !== id);
-		setCommentsMap(buildCommentTreeMap(newComments));
 		updateComments(newComments);
 	}
 
-	useEffect(() => {
+	function updateComment(id: number, content: string) {
+		const newComments = allComments.map(c => (c.id !== id ? c : { ...c, content }));
+		updateComments(newComments);
+	}
+
+	const loadFromLocalStorage = useCallback(() => {
 		try {
 			const stored = JSON.parse(storage.getItem("fementor_comments") ?? "null");
 			if (!stored) {
@@ -48,13 +54,23 @@ export function useComments(storage: Storage = localStorage) {
 		} catch (e) {
 			updateComments(data.comments as unknown as FlatComment[]);
 		}
-	}, [storage, setCommentsMap, updateComments]);
+	}, [storage, updateComments]);
+
+	useMounted(() => {
+		loadFromLocalStorage();
+	});
+
+	useEffect(() => {
+		window.addEventListener("storage", loadFromLocalStorage);
+		return () => window.removeEventListener("storage", loadFromLocalStorage);
+	}, [loadFromLocalStorage]);
 
 	return {
 		comments: topLevelComments,
 		user,
 		addComment,
 		deleteComment,
+		updateComment,
 	};
 }
 

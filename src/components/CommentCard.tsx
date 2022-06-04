@@ -5,12 +5,13 @@ import { mediaQueries } from "../styles/media-queries";
 import Card from "./Card";
 import CommentCardScore from "./CommentCardScore";
 import { DeleteCommentModal } from "./DeleteCommentModal";
+import EditCommentForm from "./EditCommentForm";
 
 interface Props {
 	comment: Comment;
 	currentUser: User;
 	onReply?: () => void;
-	onEdit?: () => void;
+	onEdit: (content: string) => void;
 	onDelete?: () => void;
 }
 
@@ -18,6 +19,7 @@ export default function CommentCard({ comment, currentUser, onReply, onEdit, onD
 	const isCurrentUser = currentUser.username === comment.user.username;
 
 	const [showDeleteConfirmModal, setShowDeleteConfirmModal] = useState(false);
+	const [editComment, setEditComment] = useState(false);
 
 	return (
 		<Root>
@@ -30,27 +32,47 @@ export default function CommentCard({ comment, currentUser, onReply, onEdit, onD
 				<span className="comment-card__created-at">{comment.createdAt}</span>
 			</div>
 			<div className="comment-card__content">
-				{"replyingTo" in comment && !!comment.replyingTo && (
-					<span className="comment-card__tag">@{comment.replyingTo} </span>
+				{editComment ? (
+					<EditCommentForm
+						content={comment.content}
+						onSubmit={content => {
+							onEdit(content);
+							setEditComment(false);
+						}}
+					/>
+				) : (
+					<>
+						{"replyingTo" in comment && !!comment.replyingTo && (
+							<span className="comment-card__tag">@{comment.replyingTo} </span>
+						)}
+						{comment.content}
+					</>
 				)}
-				{comment.content}
 			</div>
 
-			<CommentCardScore score={comment.score} />
+			<div className="comment-card__score">
+				<CommentCardScore score={comment.score} />
+			</div>
 
 			<div className="comment-card__actions">
 				{isCurrentUser ? (
 					<>
+						{!editComment && (
+							<button
+								className="comment-card__action comment-card__action--delete"
+								onClick={() => setShowDeleteConfirmModal(true)}
+							>
+								<img src="/images/icon-delete.svg" alt="" />
+								Delete
+							</button>
+						)}
 						<button
-							className="comment-card__action comment-card__action--delete"
-							onClick={() => setShowDeleteConfirmModal(true)}
+							className="comment-card__action comment-card__action--primary"
+							onClick={() => setEditComment(edit => !edit)}
+							aria-label={editComment ? "Cancel Editing Comment" : "Edit Comment"}
 						>
-							<img src="/images/icon-delete.svg" alt="" />
-							Delete
-						</button>
-						<button className="comment-card__action comment-card__action--primary" onClick={onEdit}>
 							<img src="/images/icon-edit.svg" alt="" />
-							Edit
+							{editComment ? "Cancel" : "Edit"}
 						</button>
 					</>
 				) : (
@@ -90,7 +112,7 @@ const Root = styled(Card)`
 			grid-template-areas:
 				"score header  actions"
 				"score content content"
-				".     content content";
+				"score content content";
 			gap: 15px 24px;
 		`
 	)}
@@ -143,6 +165,10 @@ const Root = styled(Card)`
 	.comment-card__tag {
 		color: var(--moderate-blue);
 		font-weight: 500;
+	}
+
+	.comment-card__score {
+		grid-area: score;
 	}
 
 	.comment-card__actions {

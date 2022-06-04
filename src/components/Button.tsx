@@ -39,4 +39,13 @@ export default styled.button<{
 	cursor: pointer;
 	border: none;
 	box-shadow: none;
+
+	&:hover:not(:disabled) {
+		opacity: 0.8;
+	}
+
+	&:disabled {
+		background-color: var(--light-grayish-blue);
+		cursor: not-allowed;
+	}
 `;

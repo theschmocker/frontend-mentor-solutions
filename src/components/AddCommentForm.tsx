@@ -6,6 +6,7 @@ import { User } from "../hooks/comments";
 import styled from "styled-components";
 import { mediaQueries } from "../styles/media-queries";
 import ScreenreaderText from "./ScreenreaderText";
+import CommentField from "./CommentField";
 
 export function AddCommentForm({
 	user,
@@ -32,14 +33,13 @@ export function AddCommentForm({
 			<img src={user.image.png} alt="" className="add-comment__image" />
 			<label className="add-comment__label">
 				<ScreenreaderText>Add a comment</ScreenreaderText>
-				<textarea
+				<CommentField
 					name="content"
-					className="add-comment__content"
 					placeholder="Add a comment..."
 					required
 					value={content}
 					onChange={e => setContent(e.target.value)}
-				></textarea>
+				/>
 			</label>
 			<Button className="add-comment__send" disabled={!trimmed}>
 				Send
@@ -85,36 +85,5 @@ const Root = styled(Card)`
 	.add-comment__send {
 		grid-area: submit;
 		justify-self: end;
-	}
-
-	.add-comment__send:hover:not(:disabled) {
-		opacity: 0.8;
-	}
-
-	.add-comment__send:disabled {
-		background-color: var(--light-grayish-blue);
-		cursor: not-allowed;
-	}
-
-	textarea {
-		width: 100%;
-		max-width: 100%;
-		padding: 0.75rem 1.5rem;
-		min-height: 96px;
-		border-radius: 0.5rem;
-		border: 1px solid var(--light-gray);
-		font-size: 1rem;
-		line-height: 1.5;
-		resize: vertical;
-	}
-
-	textarea:focus {
-		border-color: var(--moderate-blue);
-		outline: none;
-	}
-
-	textarea::placeholder {
-		font-family: "Rubik";
-		color: var(--dark-gray);
 	}
 `;

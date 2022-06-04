@@ -11,11 +11,13 @@ export function Comment({
 	currentUser,
 	onDelete,
 	onReply,
+	onEdit,
 }: {
 	comment: IComment;
 	currentUser: User;
 	onDelete: (id: number) => void;
 	onReply: (content: string, parentCommentId: number) => void;
+	onEdit: (content: string) => void;
 }) {
 	const [reply, setReply] = useState(false);
 
@@ -33,11 +35,19 @@ export function Comment({
 				currentUser={currentUser}
 				onDelete={() => onDelete(comment.id)}
 				onReply={() => setReply(r => !r)}
+				onEdit={onEdit}
 			/>
 			{showRepliesSection && (
 				<div className="comment__replies">
 					{comment.replies?.map(reply => (
-						<Comment key={reply.id} comment={reply} currentUser={currentUser} onDelete={onDelete} onReply={onReply} />
+						<Comment
+							key={reply.id}
+							comment={reply}
+							currentUser={currentUser}
+							onDelete={onDelete}
+							onReply={onReply}
+							onEdit={onEdit}
+						/>
 					))}
 					{reply && <AddCommentForm user={currentUser} onSubmit={handleSubmit} />}
 				</div>

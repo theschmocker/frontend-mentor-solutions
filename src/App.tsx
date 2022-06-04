@@ -5,13 +5,20 @@ import styled, { createGlobalStyle } from "styled-components";
 import { mediaQueries } from "./styles/media-queries";
 
 function App() {
-	const { comments, user, addComment, deleteComment } = useComments();
+	const { comments, user, addComment, deleteComment, updateComment } = useComments();
 	return (
 		<>
 			<GlobalStyles />
 			<Root>
 				{Object.entries(comments).map(([id, comment]) => (
-					<Comment key={id} comment={comment} currentUser={user} onDelete={deleteComment} onReply={addComment} />
+					<Comment
+						key={id}
+						comment={comment}
+						currentUser={user}
+						onDelete={deleteComment}
+						onReply={addComment}
+						onEdit={content => updateComment(comment.id, content)}
+					/>
 				))}
 				<AddCommentForm user={user} onSubmit={addComment} />
 			</Root>

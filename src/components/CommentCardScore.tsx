@@ -22,8 +22,7 @@ export default function CommentCardScore({
 }
 
 const Root = styled.div`
-	grid-area: score;
-	display: flex;
+	display: inline-flex;
 	align-items: center;
 	justify-self: start;
 	gap: 3px;
