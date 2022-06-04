@@ -10,11 +10,11 @@ export default function CommentCardScore({
 }) {
 	return (
 		<Root>
-			<button className="comment-score__button" onClick={() => onChange("up")}>
+			<button className="comment-score__button" onClick={() => onChange("up")} aria-label="Upvote">
 				<img src="/images/icon-plus.svg" alt="" />
 			</button>
 			<span className="comment-score__value">{score}</span>
-			<button className="comment-score__button" onClick={() => onChange("down")}>
+			<button className="comment-score__button" onClick={() => onChange("down")} aria-label="Downvote">
 				<img src="/images/icon-minus.svg" alt="" />
 			</button>
 		</Root>
