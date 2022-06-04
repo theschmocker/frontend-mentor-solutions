@@ -36,33 +36,24 @@ const Root = styled.main`
 	max-width: 730px;
 	margin: 0 auto;
 
-	.comment {
-		padding-top: 1rem;
-		${mediaQueries.medium(
-			css => css`
-				padding-top: 1.25rem;
-			`
-		)}
-	}
-
 	${mediaQueries.medium(
 		css => css`
 			padding: 64px 0;
 		`
 	)}
 
+	.comment {
+		padding-top: var(--comment-list-item-spacing);
+	}
+
 	.comment-form {
-		padding-top: 1rem;
-		${mediaQueries.large(
-			css => css`
-				padding-top: 1.5rem;
-			`
-		)}
+		padding-top: var(--comment-list-item-spacing);
 	}
 `;
 
 const GlobalStyles = createGlobalStyle`
 	:root {
+		// colors
 		--dark-blue: #334253;
 		--moderate-blue: #5357b6;
 		--light-grayish-blue: #c5c6ef;
@@ -71,6 +62,15 @@ const GlobalStyles = createGlobalStyle`
 		--light-gray: #e9ebf0;
 		--soft-red: #ed6368;
 		--pale-red: #ffb8bb;
+
+		// layout
+		--comment-list-item-spacing: 1rem;
+
+		${mediaQueries.large(
+			css => css`
+				--comment-list-item-spacing: 1.25rem;
+			`
+		)}
 	}
 
 	*,

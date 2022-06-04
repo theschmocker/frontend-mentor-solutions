@@ -55,52 +55,32 @@ const Root = styled.div<{ hasChildren: boolean }>`
 
 	.comment__replies {
 		position: relative;
-		/* gap: 1rem; */
 		padding-left: 1rem;
 
 		&::before {
 			display: ${props => (props.hasChildren ? "block" : "none")};
 			content: "";
 			position: absolute;
-			top: 1rem;
 			left: 0;
 			bottom: 0;
 			width: 2px;
-			height: calc(100% - 1rem);
+			height: calc(100% - var(--comment-list-item-spacing));
 			background-color: var(--light-gray);
-
-			${mediaQueries.large(
-				css => css`
-					top: 1.5rem;
-					height: calc(100% - 1.5rem);
-				`
-			)}
-		}
-
-		.comment {
-			padding-top: 1rem;
-			${mediaQueries.large(
-				css => css`
-					padding-top: 1.5rem;
-				`
-			)}
 		}
 
 		${mediaQueries.large(
 			css => css`
 				margin-left: 43px;
 				padding-left: 43px;
-				border-left: 2px solid var(--light-gray);
 			`
 		)}
 
+		.comment {
+			padding-top: var(--comment-list-item-spacing);
+		}
+
 		.reply-form {
-			padding-top: 1rem;
-			${mediaQueries.large(
-				css => css`
-					padding-top: 1.5rem;
-				`
-			)}
+			padding-top: var(--comment-list-item-spacing);
 		}
 	}
 `;
