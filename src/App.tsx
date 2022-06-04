@@ -45,7 +45,7 @@ const Root = styled.main`
 		`
 	)}
 
-	.comment {
+	& > *:not(:first-of-type) > .comment {
 		padding-top: var(--comment-list-item-spacing);
 	}
 
@@ -79,6 +79,6 @@ const GlobalStyles = createGlobalStyle`
 			"Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
-		padding: 1rem;
+		/* padding: 1rem; */
 	}
 `;
