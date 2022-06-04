@@ -10,9 +10,11 @@ import CommentField from "./CommentField";
 export function AddCommentForm({
 	user,
 	onSubmit,
+	autoFocus,
 }: {
 	user: User;
 	onSubmit: (content: string) => void | Promise<void>;
+	autoFocus?: boolean;
 }) {
 	const [content, setContent] = useState("");
 	const trimmed = content.trim();
@@ -38,6 +40,7 @@ export function AddCommentForm({
 					required
 					value={content}
 					onChange={e => setContent(e.target.value)}
+					autoFocus={autoFocus}
 				/>
 			</label>
 			<Button className="add-comment__send" disabled={!trimmed}>

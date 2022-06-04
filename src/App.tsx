@@ -3,17 +3,28 @@ import { Comment } from "./components/Comment";
 import styled, { createGlobalStyle } from "styled-components";
 import { mediaQueries } from "./styles/media-queries";
 import { useComments } from "./state/comments";
+import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
+import { useAnimateContext } from "./animate-context";
+import { useLayoutEffect, useState } from "react";
+import ExpandAnimation from "./components/ExpandAnimation";
 
 function App() {
 	const { comments, user, addComment } = useComments();
+
 	return (
 		<>
 			<GlobalStyles />
 			<Root>
-				{Object.entries(comments).map(([id, comment]) => (
-					<Comment key={id} comment={comment} currentUser={user} />
-				))}
-				<AddCommentForm user={user} onSubmit={addComment} />
+				<AnimatePresence>
+					{comments.map(comment => (
+						<ExpandAnimation key={comment.id} k={comment.id}>
+							<Comment comment={comment} currentUser={user} />
+						</ExpandAnimation>
+					))}
+				</AnimatePresence>
+				<div className="comment-form">
+					<AddCommentForm user={user} onSubmit={addComment} />
+				</div>
 			</Root>
 		</>
 	);
@@ -22,17 +33,32 @@ function App() {
 export default App;
 
 const Root = styled.main`
-	display: grid;
-	gap: 1rem;
 	max-width: 730px;
 	margin: 0 auto;
+
+	.comment {
+		padding-top: 1rem;
+		${mediaQueries.medium(
+			css => css`
+				padding-top: 1.25rem;
+			`
+		)}
+	}
 
 	${mediaQueries.medium(
 		css => css`
 			padding: 64px 0;
-			gap: 1.25rem;
 		`
 	)}
+
+	.comment-form {
+		padding-top: 1rem;
+		${mediaQueries.large(
+			css => css`
+				padding-top: 1.5rem;
+			`
+		)}
+	}
 `;
 
 const GlobalStyles = createGlobalStyle`

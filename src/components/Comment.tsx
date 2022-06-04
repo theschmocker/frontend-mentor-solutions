@@ -2,14 +2,16 @@ import { useState } from "react";
 import { AddCommentForm } from "./AddCommentForm";
 import CommentCard from "./CommentCard";
 import { Comment as IComment, useComments, User } from "../state/comments";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { mediaQueries } from "../styles/media-queries";
+import { AnimatePresence, motion } from "framer-motion";
+import { useAnimateContext } from "../animate-context";
+import ExpandAnimation from "./ExpandAnimation";
 
 export function Comment({ comment, currentUser }: { comment: IComment; currentUser: User }) {
 	const [reply, setReply] = useState(false);
 	const { deleteComment, addComment, updateComment, upvoteComment, downvoteComment } = useComments();
-
-	const showRepliesSection = reply || !!comment.replies.length;
+	const shouldAnimate = useAnimateContext();
 
 	function handleSubmit(content: string) {
 		addComment(content, comment.id);
@@ -17,7 +19,7 @@ export function Comment({ comment, currentUser }: { comment: IComment; currentUs
 	}
 
 	return (
-		<Root>
+		<Root className="comment">
 			<CommentCard
 				comment={comment}
 				currentUser={currentUser}
@@ -27,35 +29,83 @@ export function Comment({ comment, currentUser }: { comment: IComment; currentUs
 				onUpvote={() => upvoteComment(comment.id)}
 				onDownvote={() => downvoteComment(comment.id)}
 			/>
-			{showRepliesSection && (
-				<div className="comment__replies">
+
+			<div className="comment__replies">
+				<AnimatePresence>
 					{comment.replies?.map(reply => (
-						<Comment key={reply.id} comment={reply} currentUser={currentUser} />
+						<ExpandAnimation key={reply.id} k={reply.id}>
+							<Comment comment={reply} currentUser={currentUser} />
+						</ExpandAnimation>
 					))}
-					{reply && <AddCommentForm user={currentUser} onSubmit={handleSubmit} />}
-				</div>
-			)}
+					{reply && (
+						<ExpandAnimation k="reply-form">
+							<div className="reply-form">
+								<AddCommentForm user={currentUser} onSubmit={handleSubmit} autoFocus />
+							</div>
+						</ExpandAnimation>
+					)}
+				</AnimatePresence>
+			</div>
 		</Root>
 	);
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 const Root = styled.div`
-	display: grid;
-	gap: 1rem;
+	display: flex;
+	flex-direction: column;
 
 	.comment__replies {
-		display: grid;
-		gap: 1rem;
+		position: relative;
+		/* gap: 1rem; */
 		padding-left: 1rem;
-		border-left: 2px solid var(--light-gray);
+
+		&::before {
+			content: "";
+			position: absolute;
+			top: 1rem;
+			left: 0;
+			bottom: 0;
+			width: 2px;
+			height: 100%;
+			background-color: var(--light-gray);
+
+			${mediaQueries.large(
+				css => css`
+					top: 1.5rem;
+				`
+			)}
+		}
+
+		comment {
+			padding-top: 1rem;
+			${mediaQueries.large(
+				css => css`
+					padding-top: 1.5rem;
+				`
+			)}
+		}
 
 		${mediaQueries.large(
 			css => css`
-				gap: 1.5rem;
 				margin-left: 43px;
 				padding-left: 43px;
 				border-left: 2px solid var(--light-gray);
 			`
 		)}
+
+		.reply-form {
+			padding-top: 1rem;
+			${mediaQueries.large(
+				css => css`
+					padding-top: 1.5rem;
+				`
+			)}
+		}
 	}
 `;
+
+const NestedRootSelected = () =>
+	css`
+		${Root}
+	`;
