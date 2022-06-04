@@ -1,7 +1,10 @@
+/* eslint-disable indent */
+/** pre */
 import styled from "styled-components";
 import { createPortal } from "react-dom";
 import { DetailedHTMLProps, HTMLAttributes, KeyboardEventHandler, ReactNode, useEffect, useRef } from "react";
 import FocusLock from "react-focus-lock";
+import { mediaQueries } from "../styles/media-queries";
 
 const modalOutlet = document.querySelector<HTMLElement>("#modal-outlet");
 
@@ -26,9 +29,11 @@ const StyledModal = styled.div`
 		z-index: 1;
 		padding: 1.5rem 1.6875rem;
 
-		@media screen and (min-width: 1024px) {
-			padding: 2rem;
-		}
+		${mediaQueries.large(
+			css => css`
+				padding: 2rem;
+			`
+		)}
 	}
 `;
 

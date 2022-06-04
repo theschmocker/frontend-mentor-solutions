@@ -1,9 +1,10 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { Comment, User } from "../hooks/comments";
-import Button from "./Button";
-import "./CommentCard.css";
-import Modal from "./Modal";
+import { mediaQueries } from "../styles/media-queries";
+import Card from "./Card";
+import CommentCardScore from "./CommentCardScore";
+import { DeleteCommentModal } from "./DeleteCommentModal";
 
 interface Props {
 	comment: Comment;
@@ -19,7 +20,7 @@ export default function CommentCard({ comment, currentUser, onReply, onEdit, onD
 	const [showDeleteConfirmModal, setShowDeleteConfirmModal] = useState(false);
 
 	return (
-		<div className="card comment-card">
+		<Root>
 			<div className="comment-card__header">
 				<img src={comment.user.image.png} alt="" className="comment-card__image" />
 				<span className="comment-card__username">
@@ -35,7 +36,7 @@ export default function CommentCard({ comment, currentUser, onReply, onEdit, onD
 				{comment.content}
 			</div>
 
-			<CommentScore score={comment.score} />
+			<CommentCardScore score={comment.score} />
 
 			<div className="comment-card__actions">
 				{isCurrentUser ? (
@@ -60,80 +61,116 @@ export default function CommentCard({ comment, currentUser, onReply, onEdit, onD
 				)}
 			</div>
 			{showDeleteConfirmModal && (
-				<Modal onClose={() => setShowDeleteConfirmModal(false)}>
-					<DeleteModalInner>
-						<DeleteModalTitle>Delete comment</DeleteModalTitle>
-						<DeleteModalContent>
-							Are you sure you want to delete this comment? This will remove the comment and can’t be undone.
-						</DeleteModalContent>
-						<DeleteModalActions>
-							<Button variant="subdued" padding="small" onClick={() => setShowDeleteConfirmModal(false)}>
-								No, cancel
-							</Button>
-							<Button
-								variant="danger"
-								padding="small"
-								onClick={() => {
-									onDelete?.();
-									setShowDeleteConfirmModal(false);
-								}}
-							>
-								Yes, delete
-							</Button>
-						</DeleteModalActions>
-					</DeleteModalInner>
-				</Modal>
+				<DeleteCommentModal
+					onCancel={() => setShowDeleteConfirmModal(false)}
+					onDelete={() => {
+						onDelete?.();
+						setShowDeleteConfirmModal(false);
+					}}
+				/>
 			)}
-		</div>
+		</Root>
 	);
 }
 
-function CommentScore({ score, onChange }: { score: number; onChange?: (dir: "up" | "down") => void }) {
-	return (
-		<div className="comment-score">
-			<button className="comment-score__button">
-				<img src="/images/icon-plus.svg" alt="" />
-			</button>
-			<span className="comment-score__value">{score}</span>
-			<button className="comment-score__button">
-				<img src="/images/icon-minus.svg" alt="" />
-			</button>
-		</div>
-	);
-}
+const Root = styled(Card)`
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-template-areas:
+		"header  header"
+		"content content"
+		"score   actions";
+	flex-direction: column;
+	gap: 1rem;
 
-const DeleteModalTitle = styled.h2`
-	font-size: 1.25rem;
-	font-weight: 500;
-	line-height: 1.185;
-	color: var(--dark-blue);
-	margin: 0;
-`;
+	${mediaQueries.large(
+		css => css`
+			grid-template-columns: min-content 1fr min-content;
+			grid-template-rows: min-content 1fr min-content;
+			grid-template-areas:
+				"score header  actions"
+				"score content content"
+				".     content content";
+			gap: 15px 24px;
+		`
+	)}
 
-const DeleteModalContent = styled.p`
-	font-size: 1rem;
-	line-height: 1.5;
-	color: var(--dark-gray);
-	margin: 1rem 0;
-
-	@media screen and (min-width: 1024px) {
-		margin: 1.25rem 0;
-	}
-`;
-
-const DeleteModalActions = styled.div`
-	display: flex;
-	flex-wrap: wrap;
-	gap: 0.75rem;
-	& > * {
-		flex: 1 0 auto;
+	.comment-card__header {
+		grid-area: header;
+		display: flex;
+		align-items: center;
+		gap: 1rem;
 	}
 
-	@media screen and (min-width: 1024px) {
-		gap: 0.875rem;
+	.comment-card__image {
+		width: 32px;
+		aspect-ratio: 1;
 	}
-`;
 
-const DeleteModalInner = styled.div`
-	max-width: 336px;
+	.comment-card__username {
+		font-weight: 500;
+		line-height: 1.1875;
+		color: var(--dark-blue);
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.comment-card__you-badge {
+		border-radius: 2px;
+		padding: 1px 6px 3px 6px;
+		background-color: var(--moderate-blue);
+		color: white;
+		font-size: 0.8125rem;
+		line-height: 1.18;
+	}
+
+	.comment-card__created-at {
+		line-height: 1.5;
+		color: var(--dark-gray);
+	}
+
+	.comment-card__content {
+		grid-area: content;
+		font-family: "Rubik";
+		font-style: normal;
+		font-weight: 400;
+		font-size: 16px;
+		line-height: 1.5;
+		color: var(--dark-gray);
+	}
+
+	.comment-card__tag {
+		color: var(--moderate-blue);
+		font-weight: 500;
+	}
+
+	.comment-card__actions {
+		grid-area: actions;
+		display: flex;
+		justify-content: flex-end;
+		gap: 1rem;
+	}
+
+	.comment-card__action {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		color: var(--moderate-blue);
+		font-weight: 500;
+		font-size: 1rem;
+		line-height: 1.5;
+		appearance: none;
+		border: none;
+		background: transparent;
+		cursor: pointer;
+	}
+
+	.comment-card__action--primary {
+		color: var(--moderate-blue);
+	}
+
+	.comment-card__action--delete {
+		color: var(--soft-red);
+	}
 `;

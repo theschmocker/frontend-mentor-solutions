@@ -1,99 +1,65 @@
-import { useId, useState } from "react";
-import "./App.css";
-import Button from "./components/Button";
-import CommentCard from "./components/CommentCard";
-import Modal from "./components/Modal";
-import { Comment as IComment, useComments, User } from "./hooks/comments";
+import { AddCommentForm } from "./components/AddCommentForm";
+import { useComments } from "./hooks/comments";
+import { Comment } from "./components/Comment";
+import styled, { createGlobalStyle } from "styled-components";
+import { mediaQueries } from "./styles/media-queries";
 
 function App() {
 	const { comments, user, addComment, deleteComment } = useComments();
 	return (
-		<main>
-			<div className="App">
+		<>
+			<GlobalStyles />
+			<Root>
 				{Object.entries(comments).map(([id, comment]) => (
 					<Comment key={id} comment={comment} currentUser={user} onDelete={deleteComment} onReply={addComment} />
 				))}
 				<AddCommentForm user={user} onSubmit={addComment} />
-			</div>
-		</main>
+			</Root>
+		</>
 	);
 }
 
 export default App;
 
-function Comment({
-	comment,
-	currentUser,
-	onDelete,
-	onReply,
-}: {
-	comment: IComment;
-	currentUser: User;
-	onDelete: (id: number) => void;
-	onReply: (content: string, parentCommentId: number) => void;
-}) {
-	const [reply, setReply] = useState(false);
+const Root = styled.main`
+	display: grid;
+	gap: 1rem;
+	max-width: 730px;
+	margin: 0 auto;
 
-	const showRepliesSection = reply || !!comment.replies.length;
+	${mediaQueries.medium(
+		css => css`
+			padding: 64px 0;
+			gap: 1.25rem;
+		`
+	)}
+`;
 
-	function handleSubmit(content: string) {
-		onReply(content, comment.id);
-		setReply(false);
+const GlobalStyles = createGlobalStyle`
+	:root {
+		--dark-blue: #334253;
+		--moderate-blue: #5357b6;
+		--light-grayish-blue: #c5c6ef;
+		--dark-gray: #67727e;
+		--very-light-gray: #f5f6fa;
+		--light-gray: #e9ebf0;
+		--soft-red: #ed6368;
+		--pale-red: #ffb8bb;
 	}
 
-	return (
-		<div className="comment">
-			<CommentCard
-				comment={comment}
-				currentUser={currentUser}
-				onDelete={() => onDelete(comment.id)}
-				onReply={() => setReply(r => !r)}
-			/>
-			{showRepliesSection && (
-				<div className="comment__replies">
-					{comment.replies?.map(reply => (
-						<Comment key={reply.id} comment={reply} currentUser={currentUser} onDelete={onDelete} onReply={onReply} />
-					))}
-					{reply && <AddCommentForm user={currentUser} onSubmit={handleSubmit} />}
-				</div>
-			)}
-		</div>
-	);
-}
-
-function AddCommentForm({ user, onSubmit }: { user: User; onSubmit: (content: string) => void | Promise<void> }) {
-	const [content, setContent] = useState("");
-	const trimmed = content.trim();
-	const id = useId();
-
-	async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-		e.preventDefault();
-		if (!trimmed) {
-			return;
-		}
-
-		await onSubmit(trimmed);
-		setContent("");
+	*,
+	*::after,
+	*::before {
+		box-sizing: border-box !important;
 	}
 
-	return (
-		<form className="card add-comment" onSubmit={handleSubmit}>
-			<img src={user.image.png} alt="" className="add-comment__image" />
-			<label htmlFor={id} className="add-comment__label">
-				<span className="sr-only">Add a comment</span>
-				<textarea
-					name="content"
-					id={id}
-					className="add-comment__content"
-					placeholder="Add a comment..."
-					required
-					value={content}
-					onChange={e => setContent(e.target.value)}
-				></textarea>
-			</label>
-			<Button className="add-comment__send" disabled={!trimmed}>
-				Send
-			</Button>
-		</form>
-	);
-}
+	body {
+		margin: 0;
+		background-color: #f2f2f2;
+		font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
+			"Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+		padding: 1rem;
+	}
+`;
