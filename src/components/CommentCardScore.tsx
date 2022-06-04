@@ -26,7 +26,7 @@ const Root = styled.div`
 	display: inline-flex;
 	align-items: center;
 	justify-self: start;
-	gap: 3px;
+	gap: 5.5px;
 	background-color: ${color("verLightGray")};
 	padding: 5px;
 	border-radius: 10px;
@@ -43,16 +43,38 @@ const Root = styled.div`
 	}
 
 	.comment-score__button {
+		position: relative;
 		appearance: none;
 		border: none;
-		background: transparent;
+		background-color: transparent;
 		padding: 10px;
 		cursor: pointer;
+		width: 30px;
+		height: 30px;
+		border-radius: 0.5rem;
+		transition: all 0.1s ease-in-out;
 
 		img {
+			position: absolute;
+			top: 50%;
+			left: 50%;
 			width: 11px;
 			height: 11px;
+			transform: translate(-50%, -50%);
 			object-fit: contain;
+		}
+
+		--hover-background: ${color("darkGray")}11;
+		--active-background: ${color("darkGray")}33;
+
+		&:hover {
+			background-color: var(--hover-background);
+			transform: scale(1.1);
+		}
+
+		&:active {
+			background-color: var(--active-background);
+			transform: scale(0.9);
 		}
 	}
 `;

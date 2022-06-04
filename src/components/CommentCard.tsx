@@ -205,6 +205,20 @@ const Root = styled(Card)`
 		background: transparent;
 		cursor: pointer;
 
+		transition: all 0.1s ease-in-out;
+		border-radius: 0.5rem;
+		padding: 0 0.5rem;
+
+		&:hover {
+			background-color: var(--hover-background);
+			box-shadow: 0 0 0 5px var(--hover-background);
+		}
+
+		&:active {
+			background-color: var(--active-background);
+			box-shadow: 0 0 0 2px var(--active-background);
+		}
+
 		img {
 			width: 14px;
 			height: 14px;
@@ -214,9 +228,13 @@ const Root = styled(Card)`
 
 	.comment-card__action--primary {
 		color: ${color("moderateBlue")};
+		--hover-background: ${color("moderateBlue")}11;
+		--active-background: ${color("moderateBlue")}33;
 	}
 
 	.comment-card__action--delete {
 		color: ${color("softRed")};
+		--hover-background: ${color("softRed")}11;
+		--active-background: ${color("softRed")}33;
 	}
 `;
