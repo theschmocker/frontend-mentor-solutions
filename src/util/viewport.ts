@@ -1,4 +1,8 @@
-export function elementIsInViewport(element: Element): boolean {
+export function elementIsInViewport(element: Element | null): boolean {
+	if (!element) {
+		return false;
+	}
+
 	const { top, bottom } = element.getBoundingClientRect();
 
 	const withinBottomBoundary = bottom < window.innerHeight;
