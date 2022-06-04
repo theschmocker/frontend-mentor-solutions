@@ -6,9 +6,12 @@ import { useComments } from "./state/comments";
 import { AnimatePresence } from "framer-motion";
 import ExpandAnimation from "./components/ExpandAnimation";
 import ScreenreaderText from "./components/ScreenreaderText";
+import useNormalizeButtonFocus from "./hooks/normalize-button-focus";
 
 function App() {
 	const { comments, user, addComment } = useComments();
+
+	useNormalizeButtonFocus();
 
 	return (
 		<>
