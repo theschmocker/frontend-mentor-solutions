@@ -1,4 +1,5 @@
-import { useState } from "react";
+import formatDistance from "date-fns/formatDistance/index";
+import { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import { Comment, User } from "../state/comments";
 import { mediaQueries } from "../styles/media-queries";
@@ -44,7 +45,9 @@ export default function CommentCard({ comment, currentUser, onReply, onEdit, onD
 					{comment.user.username}
 					{isCurrentUser && <span className="comment-card__you-badge">you</span>}
 				</span>
-				<span className="comment-card__created-at">{comment.createdAt}</span>
+				<span className="comment-card__created-at">
+					<CommentDate createdAt={comment.createdAt} />
+				</span>
 			</div>
 			<div className="comment-card__content">
 				{editComment ? (
@@ -239,3 +242,20 @@ const Root = styled(Card)`
 		--active-background: ${color("softRed")}33;
 	}
 `;
+
+function CommentDate({ createdAt }: { createdAt: string }) {
+	const createdAtDate = useMemo(() => new Date(createdAt), [createdAt]);
+	const [currentDate, setCurrentDate] = useState(new Date());
+
+	useEffect(() => {
+		const interval = setInterval(() => setCurrentDate(new Date()), 10000);
+		() => clearInterval(interval);
+	}, []);
+
+	const formatted = useMemo(
+		() => formatDistance(createdAtDate, currentDate, { addSuffix: true }),
+		[createdAtDate, currentDate]
+	);
+
+	return <>{formatted}</>;
+}

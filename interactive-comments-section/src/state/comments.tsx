@@ -41,7 +41,7 @@ function useCommentsData(storage: Storage = localStorage) {
 		const comment: FlatComment = {
 			id: maxId + 1,
 			content,
-			createdAt: "Now",
+			createdAt: new Date().toISOString(),
 			user,
 			score: 0,
 			parentCommentId,
