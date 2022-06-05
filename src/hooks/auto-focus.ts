@@ -8,11 +8,12 @@ export function useAutoFocus<FocusEl extends HTMLElement, ScrollEl extends HTMLE
 	useEffect(() => {
 		if (shouldFocus && focusRef.current && scrollRef.current) {
 			setTimeout(() => {
+				// must happen at end of event loop to counteract button focus on click
 				focusRef.current?.focus({ preventScroll: true });
+
+				// must happen at end of event loop to make sure enough of the element has animated in
 				if (!elementIsInViewport(scrollRef.current)) {
-					// for some reason I couldn't determine, behavior: smooth doesn't work unless scrollIntoView is queued at the end
-					// of the event loop. behavior: auto doesn't have this issue. I thought maybe useLayoutEffect would help, but no dice
-					scrollRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+					scrollRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
 				}
 
 				if (isTextField(focusRef.current)) {
