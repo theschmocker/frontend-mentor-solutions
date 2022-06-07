@@ -4,12 +4,10 @@
 
 	import type { Load } from '@sveltejs/kit';
 
-	export const load: Load = async ({ fetch }) => {
-		const countries = await getCountries(fetch);
-
+	export const load: Load = async ({ stuff }) => {
 		return {
 			props: {
-				countries,
+				countries: stuff.countries,
 			},
 		};
 	};

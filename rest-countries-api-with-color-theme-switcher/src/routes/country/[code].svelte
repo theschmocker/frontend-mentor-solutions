@@ -89,8 +89,14 @@
 </article>
 
 <style lang="scss">
+	@import '../../lib/media';
 	.back {
 		margin-bottom: 64px;
+
+		@include tablet {
+			grid-column: 1 / -1;
+			margin-bottom: 0;
+		}
 	}
 
 	img {
@@ -101,6 +107,12 @@
 		display: flex;
 		flex-direction: column;
 		padding: calc(80px - 1.5rem) 1rem;
+
+		@include tablet {
+			display: grid;
+			gap: 80px 120px;
+			grid-template-columns: 45% auto;
+		}
 	}
 
 	.name {
@@ -115,5 +127,10 @@
 		display: flex;
 		flex-direction: column;
 		gap: 2rem;
+
+		@include desktop {
+			flex-direction: row;
+			justify-content: space-between;
+		}
 	}
 </style>
