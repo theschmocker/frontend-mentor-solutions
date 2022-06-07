@@ -1,4 +1,4 @@
-import { getContext, setContext } from 'svelte';
+import { getContext, onDestroy, setContext } from 'svelte';
 import { derived, get, writable, type Readable, type Writable } from 'svelte/store';
 
 const key = Symbol('select');
@@ -26,13 +26,23 @@ export function setSelectContext<T>(ctx: SelectContext<T>) {
 export function createSelectContext<T>(): SelectContext<T> {
 	const open = writable(false);
 	const selectedValue = writable<T | null>(null);
-	const options = writable<T[]>([]);
+	const options = writable<(T | null)[]>([]);
 
 	const activeIndex = writable(0);
 	const activeValue = derived(
 		[options, activeIndex],
 		([$options, $activeIndex]) => $options[$activeIndex] ?? null
 	);
+
+	const openUnsubscribe = open.subscribe(isOpen => {
+		if (isOpen) {
+			activeIndex.set(get(options).indexOf(get(selectedValue)));
+		}
+	});
+
+	onDestroy(() => {
+		openUnsubscribe();
+	});
 
 	return {
 		open,
