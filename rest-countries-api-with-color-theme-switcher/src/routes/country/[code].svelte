@@ -1,19 +1,21 @@
 <script context="module" lang="ts">
-	import { getCountriesByCca3, getCountryByCca3, type Country } from '$lib/data/api';
+	import { getCountryByCca3, type Country, type ListCountry } from '$lib/data/api';
 
 	import type { Load } from '@sveltejs/kit';
 
-	export const load: Load = async ({ params, fetch }) => {
+	export const load: Load = async ({ params, fetch, stuff }) => {
 		const country = await getCountryByCca3(params.code, fetch);
-		const borderingCountries = country?.borders?.length
-			? await getCountriesByCca3(country.borders, fetch)
-			: [];
 
 		if (!country) {
 			return {
 				status: 404,
 			};
 		}
+
+		const borderingCountryCodes = new Set(country.borders);
+		const borderingCountries = borderingCountryCodes.size
+			? stuff.countries?.filter((c: ListCountry) => borderingCountryCodes.has(c.cca3)) ?? []
+			: [];
 
 		return {
 			props: {
@@ -28,7 +30,7 @@
 	import CountryField from '$lib/components/CountryField.svelte';
 
 	export let country: Country;
-	export let borderingCountries: Country[] = [];
+	export let borderingCountries: ListCountry[] = [];
 
 	$: fieldsGroup1 = (
 		[
