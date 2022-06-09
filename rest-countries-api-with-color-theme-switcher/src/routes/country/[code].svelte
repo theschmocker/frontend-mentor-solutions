@@ -81,7 +81,7 @@
 			<section>
 				<h3>Bordering Countries</h3>
 				{#each borderingCountries as borderCountry}
-					<a href="/country/{borderCountry.cca3}">
+					<a href="/country/{borderCountry.cca3}" sveltekit:prefetch>
 						{borderCountry.name.common}
 					</a>
 				{/each}
