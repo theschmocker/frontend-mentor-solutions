@@ -1,5 +1,4 @@
 <script lang="ts" context="module">
-	import { getCountries } from '$lib/data/api';
 	import type { ListCountry } from '$lib/data/api';
 
 	import type { Load } from '@sveltejs/kit';
