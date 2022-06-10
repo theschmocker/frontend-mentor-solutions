@@ -114,7 +114,7 @@
 			aria-expanded="false"
 			aria-haspopup="listbox"
 			aria-labelledby="combo1-label"
-			aria-activedescendant="combo1-{activeValue ?? 'empty'}"
+			aria-activedescendant="combo1-{$activeValue ?? 'empty'}"
 			id="combo1"
 			class="combo-input"
 			role="combobox"
