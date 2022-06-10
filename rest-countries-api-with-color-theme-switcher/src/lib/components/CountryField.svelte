@@ -4,8 +4,8 @@
 </script>
 
 <div>
-	<dd>{name}:{' '}</dd>
-	<dt>{value}</dt>
+	<dt>{name}:{' '}</dt>
+	<dd>{value}</dd>
 </div>
 
 <style lang="scss">
