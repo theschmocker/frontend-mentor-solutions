@@ -28,8 +28,15 @@
 		background-color: var(--light-bg-color);
 		transition: var(--theme-transition), transform 0.25s ease-in-out;
 
-		&:hover {
+		&:hover,
+		&:focus-within {
 			transform: scale(1.02);
+		}
+
+		&:focus-within {
+			outline: medium auto currentColor;
+			outline: medium auto invert;
+			outline: 5px auto -webkit-focus-ring-color;
 		}
 
 		img {
@@ -48,6 +55,7 @@
 		&__link {
 			text-decoration: none;
 			color: var(--text-color);
+			outline: none;
 
 			&::after {
 				content: '';
