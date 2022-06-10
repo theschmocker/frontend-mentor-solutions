@@ -54,8 +54,6 @@ export async function getCountries<K extends keyof Country & string, Ks extends 
 	url.pathname += by === 'all' ? '/all' : '/alpha';
 	Object.entries(rest).forEach(([key, values]) => url.searchParams.append(key, values.join(',')));
 
-	console.log(url.toString());
-
 	const res = await _fetch(url.toString());
 	const data = await res.json();
 	return data;
