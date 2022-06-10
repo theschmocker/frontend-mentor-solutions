@@ -1,10 +1,10 @@
 <script context="module" lang="ts">
-	import { getCountryByCca3, type Country, type ListCountry } from '$lib/data/api';
+	import { getCountryByCode, type CountryDetails, type ListCountry } from '$lib/data/api';
 
 	import type { Load } from '@sveltejs/kit';
 
 	export const load: Load = async ({ params, fetch, stuff }) => {
-		const country = await getCountryByCca3(params.code, fetch);
+		const country = await getCountryByCode(params.code, fetch);
 
 		if (!country) {
 			return {
@@ -29,7 +29,7 @@
 <script lang="ts">
 	import CountryField from '$lib/components/CountryField.svelte';
 
-	export let country: Country;
+	export let country: CountryDetails;
 	export let borderingCountries: ListCountry[] = [];
 
 	$: fieldsGroup1 = (

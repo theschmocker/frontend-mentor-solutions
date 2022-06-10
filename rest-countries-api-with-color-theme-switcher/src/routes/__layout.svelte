@@ -1,11 +1,10 @@
 <script lang="ts" context="module">
-	import { getCountries } from '$lib/data/api';
-	import type { ListCountry } from '$lib/data/api';
+	import { getListCountries } from '$lib/data/api';
 
 	import type { Load } from '@sveltejs/kit';
 
 	export const load: Load = async ({ fetch }) => {
-		const countries = await getCountries(fetch);
+		const countries = await getListCountries(fetch);
 
 		return {
 			stuff: {

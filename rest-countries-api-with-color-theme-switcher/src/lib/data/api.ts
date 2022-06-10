@@ -1,34 +1,69 @@
 const baseUrl = 'https://restcountries.com/v3.1';
 
-export async function getCountries(_fetch: Window['fetch'] = fetch): Promise<ListCountry[]> {
-	const res = await _fetch(`${baseUrl}/all?fields=name,population,region,capital,flags,cca3`);
+export async function getListCountries(_fetch: Window['fetch'] = fetch) {
+	return getCountries(
+		{ by: 'all', fields: ['name', 'population', 'region', 'capital', 'flags', 'cca3'] },
+		_fetch
+	);
+}
+
+export async function getCountryByCode(code: string, _fetch: Window['fetch']) {
+	return (
+		(
+			await getCountries(
+				{
+					by: 'cca3',
+					codes: [code],
+					fields: [
+						'name',
+						'population',
+						'region',
+						'subregion',
+						'borders',
+						'capital',
+						'tld',
+						'flags',
+						'currencies',
+						'languages',
+					],
+				},
+				_fetch
+			)
+		)[0] ?? null
+	);
+}
+
+type Options<K extends keyof Country & string, Keys extends K[] = K[]> =
+	| {
+			by: 'all';
+			fields?: Keys;
+	  }
+	| {
+			by: 'cca3';
+			fields?: Keys;
+			codes: string[];
+	  };
+
+export async function getCountries<K extends keyof Country & string, Ks extends K[] = K[]>(
+	options?: Options<K, Ks>,
+	_fetch: Window['fetch'] = fetch
+): Promise<{ [IncludedKey in Ks[number]]: Country[IncludedKey] }[]> {
+	const { by, ...rest } = options ?? { by: 'all' };
+
+	const url = new URL(baseUrl);
+	url.pathname += by === 'all' ? '/all' : '/alpha';
+	Object.entries(rest).forEach(([key, values]) => url.searchParams.append(key, values.join(',')));
+
+	console.log(url.toString());
+
+	const res = await _fetch(url.toString());
 	const data = await res.json();
 	return data;
 }
 
-export async function getCountriesByCca3(
-	code: string[],
-	_fetch: Window['fetch'] = fetch
-): Promise<Country[]> {
-	const res = await _fetch(`${baseUrl}/alpha/?codes=${code.join(',')}`);
+export type CountryDetails = Awaited<ReturnType<typeof getCountryByCode>>;
 
-	const data = await res.json();
-
-	return data;
-}
-
-export async function getCountryByCca3(
-	code: string,
-	_fetch: Window['fetch'] = fetch
-): Promise<Country | undefined> {
-	const data = await getCountriesByCca3([code], _fetch);
-	return data[0];
-}
-
-export type ListCountry = Pick<
-	Country,
-	'flags' | 'name' | 'capital' | 'region' | 'population' | 'cca3'
->;
+export type ListCountry = Awaited<ReturnType<typeof getListCountries>>[number];
 
 export interface Flags {
 	png: string;
