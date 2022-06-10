@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import { fly } from 'svelte/transition';
 
 	import { createSelectContext, setSelectContext } from './state';
@@ -113,7 +113,7 @@
 		<button
 			aria-controls={$open ? 'listbox1' : undefined}
 			aria-owns={$open ? 'listbox1' : undefined}
-			aria-expanded="false"
+			aria-expanded={$open ? 'true' : 'false'}
 			aria-haspopup="listbox"
 			aria-labelledby="combo1-label"
 			aria-activedescendant={$open ? `combo1-${$activeValue ?? 'empty'}` : undefined}
@@ -122,13 +122,20 @@
 			role="combobox"
 			on:keydown={handleKeydown}
 			on:click={e => {
-				e.currentTarget.focus();
 				$open = !$open;
+				tick().then(() => {});
 			}}
 			on:focusout={handleFocusout}
 		>
 			<slot name="button-text">{value ?? ''}</slot>
-			<svg width="10" height="7" viewBox="0 0 10 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+			<svg
+				width="10"
+				height="7"
+				viewBox="0 0 10 7"
+				fill="none"
+				xmlns="http://www.w3.org/2000/svg"
+				aria-hidden="true"
+			>
 				<g id="expand-more">
 					<path
 						fill-rule="evenodd"

@@ -6,7 +6,7 @@
 </script>
 
 <div class="country-card">
-	<img src={country.flags.svg} alt="" />
+	<img src={country.flags.svg} alt="" aria-hidden="true" />
 	<div class="country-card__body">
 		<a class="country-card__link" href="/country/{country.cca3}" sveltekit:prefetch>
 			<h2 class="country-card__title">{country.name.common}</h2>
