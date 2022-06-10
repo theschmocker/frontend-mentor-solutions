@@ -158,7 +158,6 @@
 <style lang="scss">
 	.combo {
 		display: block;
-		margin-bottom: 1.5em;
 		position: relative;
 		width: 200px;
 	}
@@ -184,13 +183,6 @@
 			outline: medium auto invert;
 			outline: 5px auto -webkit-focus-ring-color;
 		}
-	}
-
-	.combo-label {
-		display: block;
-		font-size: 20px;
-		font-weight: 100;
-		margin-bottom: 0.25em;
 	}
 
 	.combo-menu {

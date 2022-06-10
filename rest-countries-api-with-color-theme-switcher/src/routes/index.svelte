@@ -52,7 +52,7 @@
 </script>
 
 <div class="search-wrapper">
-	<form on:submit|preventDefault={() => {}}>
+	<form on:submit|preventDefault>
 		<label class="search">
 			<div>
 				<svg
@@ -83,9 +83,9 @@
 		<svelte:fragment slot="button-text">
 			{filterRegion == null ? 'Filter by Region' : filterRegion}
 		</svelte:fragment>
-		<SelectOption value={null} let:active>All Regions</SelectOption>
+		<SelectOption value={null}>All Regions</SelectOption>
 		{#each [...regions] as region (region)}
-			<SelectOption value={region} let:selected>{region}</SelectOption>
+			<SelectOption value={region}>{region}</SelectOption>
 		{/each}
 	</Select>
 </div>
@@ -105,6 +105,7 @@
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(auto, 1fr));
 		gap: 40px;
+		padding: 2rem 3.5rem;
 
 		@include tablet {
 			grid-template-columns: repeat(auto-fill, minmax(264px, 1fr));
@@ -112,9 +113,9 @@
 
 		@include desktop {
 			gap: 74px;
+			padding: 3.5rem;
 		}
 
-		padding: 3.5rem;
 		@include desktop-large {
 			padding: 0;
 		}
