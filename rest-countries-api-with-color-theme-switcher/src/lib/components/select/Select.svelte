@@ -133,8 +133,8 @@
 						fill-rule="evenodd"
 						clip-rule="evenodd"
 						d="M7.875 0.875L5 3.75L2.125 0.875L1.25 1.75L5 5.5L8.75 1.75L7.875 0.875Z"
-						fill="black"
-						stroke="black"
+						fill="currentColor"
+						stroke="currentColor"
 					/>
 				</g>
 			</svg>

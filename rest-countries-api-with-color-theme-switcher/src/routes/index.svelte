@@ -137,6 +137,10 @@
 		}
 	}
 
+	form {
+		flex: 1;
+	}
+
 	.search {
 		display: flex;
 		background-color: var(--light-bg-color);
@@ -144,9 +148,14 @@
 		box-shadow: 0px 2px 9px rgba(0, 0, 0, 0.0532439);
 		border-radius: 5px;
 		overflow: hidden;
+		widows: 100%;
 
 		@include tablet {
 			max-width: 343px;
+		}
+
+		@include desktop {
+			max-width: 480px;
 		}
 
 		&:focus-within {
@@ -171,12 +180,15 @@
 			color: var(--text-color);
 
 			&::placeholder {
-				color: #c4c4c4;
+				color: #757575;
 			}
 
 			@include tablet {
 				font-size: 0.875rem;
 			}
 		}
+	}
+	.dark .search input::placeholder {
+		color: var(--text-color);
 	}
 </style>
