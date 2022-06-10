@@ -109,12 +109,14 @@
 <div bind:this={container}>
 	<span id="combo1-label" class="sr-only">Filter by region</span>
 	<div class="combo js-select" class:open={$open}>
+		<!-- axe: role=combobox: https://github.com/dequelabs/axe-core/issues/3353-->
 		<button
-			aria-controls="listbox1"
+			aria-controls={$open ? 'listbox1' : undefined}
+			aria-owns={$open ? 'listbox1' : undefined}
 			aria-expanded="false"
 			aria-haspopup="listbox"
 			aria-labelledby="combo1-label"
-			aria-activedescendant="combo1-{$activeValue ?? 'empty'}"
+			aria-activedescendant={$open ? `combo1-${$activeValue ?? 'empty'}` : undefined}
 			id="combo1"
 			class="combo-input"
 			role="combobox"
@@ -129,7 +131,6 @@
 			<svg width="10" height="7" viewBox="0 0 10 7" fill="none" xmlns="http://www.w3.org/2000/svg">
 				<g id="expand-more">
 					<path
-						id="Shape"
 						fill-rule="evenodd"
 						clip-rule="evenodd"
 						d="M7.875 0.875L5 3.75L2.125 0.875L1.25 1.75L5 5.5L8.75 1.75L7.875 0.875Z"
