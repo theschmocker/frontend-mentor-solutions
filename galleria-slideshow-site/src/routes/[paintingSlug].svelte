@@ -22,7 +22,17 @@
 </script>
 
 <script lang="ts">
+	import { navigating } from '$app/stores';
+	import { fade, fly } from 'svelte/transition';
+	import { getSlideshowContext } from '$lib/stores/slideshow';
+
+	const { previousPainting, nextPainting } = getSlideshowContext();
+
 	export let painting: Painting;
 </script>
 
-<pre>{JSON.stringify(painting, null, 2)}</pre>
+{#key painting.slug}
+	<pre
+		in:fly={{ delay: $navigating?.from.pathname === '/' ? 400 : 500, y: 50 }}
+		out:fly={{ y: 50 }}>{JSON.stringify(painting, null, 2)}</pre>
+{/key}

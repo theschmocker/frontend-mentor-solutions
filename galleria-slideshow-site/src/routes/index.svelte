@@ -1,8 +1,11 @@
 <script lang="ts">
+	import { navigating } from '$app/stores';
+
 	import PaintingCard from '$lib/components/PaintingCard.svelte';
 	import { paintings, type Painting } from '$lib/data';
 	import '$lib/stores/media';
 	import { useCurrentBreakpoint } from '$lib/stores/media';
+	import { fade, fly, scale } from 'svelte/transition';
 
 	const breakpoint = useCurrentBreakpoint();
 	$: numColumns = {
@@ -15,7 +18,11 @@
 	}[$breakpoint];
 
 	$: columns = paintings.reduce((clms, painting, i) => {
-		const colNum = i % numColumns;
+		let colNum = i % numColumns;
+		if (numColumns === 2 && i === paintings.length - 1) {
+			colNum = numColumns - 1;
+		}
+
 		let col = clms[colNum];
 		if (!col) {
 			col = [];
@@ -24,16 +31,25 @@
 		col.push(painting);
 		return clms;
 	}, [] as Painting[][]);
+
+	$: console.log($navigating);
 </script>
 
 <div
 	class="grid gap-[23px] p-6 items-start max-w-[1360px] mx-auto"
 	style="grid-template-columns: repeat({numColumns}, 1fr)"
+	in:fly={{ y: 50, delay: 400 }}
+	out:fly={{ y: 50 }}
 >
-	{#each columns as column}
+	{#each columns as column, i}
 		<div class="grid gap-[23px]">
-			{#each column as painting (painting.name)}
-				<PaintingCard {painting} />
+			{#each column as painting, j (painting.name)}
+				{@const index = i + j * numColumns}
+				<div>
+					{400 + index * 40}
+					{index * 40}
+					<PaintingCard {painting} />
+				</div>
 			{/each}
 		</div>
 	{/each}

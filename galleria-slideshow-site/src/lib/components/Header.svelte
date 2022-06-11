@@ -1,7 +1,10 @@
-<header
-	class="flex justify-between items-center p-6 border-b border-gray-200 border-solid"
-	tabindex="1"
->
+<script lang="ts">
+	import { getSlideshowContext } from '$lib/stores/slideshow';
+
+	const { isSlideshowRunning, toggle } = getSlideshowContext();
+</script>
+
+<header class="flex justify-between items-center p-6 border-b border-gray-200 border-solid">
 	<a href="/">
 		<h1>
 			<span class="sr-only">galleria</span>
@@ -24,5 +27,7 @@
 		</h1></a
 	>
 
-	<button class="link-1 text-[9px]">Start Slideshow</button>
+	<button class="link-1 text-[9px]" on:click={toggle}
+		>{$isSlideshowRunning ? 'Stop' : 'Start'} Slideshow</button
+	>
 </header>
