@@ -38,8 +38,8 @@
 <div
 	class="grid gap-[23px] p-6 items-start max-w-[1360px] mx-auto"
 	style="grid-template-columns: repeat({numColumns}, 1fr)"
-	in:fly={{ y: 50, delay: 400 }}
-	out:fly={{ y: 50 }}
+	in:fade={{ delay: 400 }}
+	out:fly={{ y: 25 }}
 >
 	{#each columns as column, i}
 		<div class="grid gap-[23px]">
@@ -51,8 +51,3 @@
 		</div>
 	{/each}
 </div>
-
-<!-- display: grid;
-  grid-gap: 10px;
-  grid-template-columns: repeat(auto-fill, minmax(250px,1fr));
-  grid-auto-rows: 20px; -->

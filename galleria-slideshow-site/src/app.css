@@ -3,7 +3,9 @@
 @tailwind utilities;
 
 @layer base {
-	html {
+	html,
+	body {
 		font-family: 'Libre Baskerville', system-ui, serif;
+		scroll-behavior: smooth;
 	}
 }
