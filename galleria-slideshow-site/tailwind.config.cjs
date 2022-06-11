@@ -17,8 +17,8 @@ module.exports = {
 			},
 		}
 	},
-	plugins: [plugin(({ addUtilities, theme }) => {
-		addUtilities({
+	plugins: [plugin(({ addComponents }) => {
+		addComponents({
 			".heading-display": {
 				fontSize: "12.5rem",
 				lineHeight: 0.75,
@@ -61,6 +61,7 @@ module.exports = {
 				fontWeight: "bold",
 				color: "theme('colors.gray.300')",
 				letterSpacing: "2.5px",
+				textTransform: 'uppercase',
 				'&:hover': {
 					color: "theme('colors.black')"
 				}
@@ -72,6 +73,7 @@ module.exports = {
 				color: "theme('colors.gray.300')",
 				letterSpacing: "2px",
 				textDecoration: "underline",
+				textTransform: 'uppercase',
 				"&:hover": { color: "theme('colors.black')" },
 			},
 			".body": {
