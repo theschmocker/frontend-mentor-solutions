@@ -52,7 +52,7 @@ module.exports = {
 			".subhead-2": {
 				fontSize: "0.8125rem",
 				lineHeight: "calc(17 / 13)",
-				fontWeight: 400,
+				fontWeight: 'bold',
 				color: "theme('colors.black')"
 			},
 			".link-1": {
