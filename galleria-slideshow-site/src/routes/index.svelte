@@ -44,10 +44,7 @@
 	{#each columns as column, i}
 		<div class="grid gap-[23px]">
 			{#each column as painting, j (painting.name)}
-				{@const index = i + j * numColumns}
 				<div>
-					{400 + index * 40}
-					{index * 40}
 					<PaintingCard {painting} />
 				</div>
 			{/each}
