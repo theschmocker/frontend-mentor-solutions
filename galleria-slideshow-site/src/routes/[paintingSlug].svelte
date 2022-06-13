@@ -24,8 +24,8 @@
 <script lang="ts">
 	import { navigating } from '$app/stores';
 	import { crossfade, fade, fly } from 'svelte/transition';
-	import { trapFocus } from '$lib/actions/trap-focus';
 	import { getImageSrc, loadImage } from '$lib/util';
+	import Lightbox from '$lib/components/Lightbox.svelte';
 
 	export let painting: Painting;
 
@@ -158,25 +158,13 @@
 	</article>
 {/key}
 
-{#if lightboxImageSrc != null}
-	<div
-		class="fixed inset-0 z-10 flex items-center justify-center px-6 md:px-12 lg:px-[95px]"
-		aria-modal="true"
-		role="dialog"
-		aria-label="Lightbox for painting {painting.name}"
-		use:trapFocus
-		on:keydown={(e) => {
-			if (e.key === 'Escape') {
-				e.preventDefault();
-				hideLightbox();
-			}
-		}}
-	>
-		<div class="absolute inset-0 bg-black/50" on:click={hideLightbox} transition:fade />
-		<div class="relative z-10 flex flex-col items-end">
-			<button class="link-1 text-white mb-9" on:click={hideLightbox} transition:fade>Close</button>
-			<!-- these images should have alt text -->
-			<img src={lightboxImageSrc} in:receive={{ key: imageKey }} out:send={{ key: imageKey }} />
-		</div>
-	</div>
-{/if}
+<Lightbox name={painting.name} show={!!lightboxImageSrc} on:close={hideLightbox}>
+	{#if lightboxImageSrc}
+		<img
+			src={lightboxImageSrc}
+			in:receive={{ key: imageKey }}
+			out:send={{ key: imageKey }}
+			alt={painting.description}
+		/>
+	{/if}
+</Lightbox>
