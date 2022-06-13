@@ -7,9 +7,11 @@ import { derived, get, writable, type Readable, type Writable } from 'svelte/sto
 export function createSlideshowStore() {
 	const { page } = getStores();
 
-	const activePainting = writable<Painting | null>();
+	const activePainting = withPrevious<Painting | null>(null);
 	const activePaintingIndex = derived(activePainting, (active) =>
-		active == null ? null : paintings.findIndex((p) => p.slug === active.slug) ?? null
+		active.current == null
+			? null
+			: paintings.findIndex((p) => p.slug === active.current!.slug) ?? null
 	);
 	const isSlideshowRunning = derived(activePaintingIndex, (index) => index != null);
 
@@ -23,7 +25,7 @@ export function createSlideshowStore() {
 	page.subscribe((p) => {
 		if (p.url.pathname === '/') {
 			activePainting.set(null);
-		} else {
+		} else if (p.params.paintingSlug !== get(activePainting).current?.slug) {
 			activePainting.set(
 				paintings.find((painting) => painting.slug === p.params.paintingSlug) ?? null
 			);
@@ -31,8 +33,8 @@ export function createSlideshowStore() {
 	});
 
 	activePainting.subscribe((active) => {
-		if (active && active.slug !== get(page).params.paintingSlug) {
-			goto(`/${active.slug}`);
+		if (active.current && active.current.slug !== get(page).params.paintingSlug) {
+			goto(`/${active.current.slug}`);
 		}
 	});
 
@@ -62,7 +64,7 @@ export function createSlideshowStore() {
 			}
 		},
 		toggle() {
-			if (get(activePainting)) {
+			if (get(activePainting).current) {
 				activePainting.set(null);
 				goto('/');
 			} else {
@@ -82,8 +84,24 @@ export function setSlideshowContext(state: ReturnType<typeof createSlideshowStor
 	setContext(key, state);
 }
 
-function readonly<T>(writable: Writable<T>): Readable<T> {
+function readonly<T>(writable: Readable<T>): Readable<T> {
 	return {
 		subscribe: writable.subscribe,
+	};
+}
+
+function withPrevious<T>(init: T) {
+	const value = writable<{ current: T; previous: T | null }>({ current: init, previous: null });
+
+	function set(current: T) {
+		value.set({
+			previous: get(value).current,
+			current,
+		});
+	}
+
+	return {
+		subscribe: value.subscribe,
+		set,
 	};
 }

@@ -9,12 +9,14 @@
 
 	const progress = spring(0);
 
-	$: if ($activePainting) {
-		progress.set((paintings.indexOf($activePainting) + 1) / paintings.length);
+	$: painting = $activePainting?.current;
+
+	$: if (painting) {
+		progress.set((paintings.indexOf(painting) + 1) / paintings.length);
 	}
 </script>
 
-{#if $activePainting}
+{#if painting}
 	<section
 		aria-label="Slideshow controls"
 		transition:slide
@@ -31,9 +33,9 @@
 			<div>
 				<h2 class="subhead-2 text-[14px]">
 					<span class="sr-only">Active painting:</span>
-					{$activePainting.name}
+					{painting.name}
 				</h2>
-				<p class="subhead-1 text-[10px] mt-2">{$activePainting.artist.name}</p>
+				<p class="subhead-1 text-[10px] mt-2">{painting.artist.name}</p>
 			</div>
 
 			<div class="grid grid-cols-2 gap-6">

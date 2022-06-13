@@ -26,6 +26,8 @@
 	import { crossfade, fade, fly } from 'svelte/transition';
 	import { getImageSrc, loadImage } from '$lib/util';
 	import Lightbox from '$lib/components/Lightbox.svelte';
+	import { getSlideshowContext } from '$lib/stores/slideshow';
+	import { sineOut } from 'svelte/easing';
 
 	export let painting: Painting;
 
@@ -36,10 +38,9 @@
 		},
 	});
 
-	$: imageKey = painting.slug + '-img';
-
+	$: thumbnailKey = painting.slug + '-img';
 	// make sure it transitions normally with the rest of the content when changing painting/leaving slideshow
-	$: thumbnailOutKey = lightboxImageSrc != null ? imageKey : imageKey + 'out';
+	$: thumbnailOutKey = lightboxImageSrc != null ? thumbnailKey : thumbnailKey + 'out';
 
 	let lightboxImageSrc: string | null;
 	let loading = false;
@@ -57,13 +58,30 @@
 		loading = false;
 		lightboxImageSrc = null;
 	}
+
+	const { activePainting, previousPainting } = getSlideshowContext();
+	$: goingToOrFromList = $navigating?.from.pathname === '/' || $navigating?.to.pathname === '/';
+	$: movingForward = $activePainting.previous === $previousPainting;
+	$: transition = {
+		in: {
+			delay: goingToOrFromList ? 400 : 425,
+			y: goingToOrFromList ? 25 : 0,
+			x: goingToOrFromList ? 0 : movingForward ? 50 : -50,
+			easing: sineOut,
+		},
+		out: {
+			y: goingToOrFromList ? 25 : 0,
+			x: goingToOrFromList ? 0 : movingForward ? -50 : 50,
+			easing: sineOut,
+		},
+	};
 </script>
 
 {#key painting.slug}
 	<article
 		class="p-6 md:p-10 lg:mt-[100px] lg:grid lg:grid-cols-[63%_1fr] lg:gap-[30px] max-w-[1440px] mx-auto"
-		in:fly={{ delay: $navigating?.from.pathname === '/' ? 400 : 500, y: 25 }}
-		out:fly={{ y: 25 }}
+		in:fly={transition.in}
+		out:fly={transition.out}
 	>
 		<header class="relative">
 			<div class="relative">
@@ -75,7 +93,7 @@
 								class="block absolute inset-0 w-full h-full object-cover"
 								src={getImageSrc(painting.images.hero.small)}
 								alt=""
-								in:receive={{ key: imageKey }}
+								in:receive={{ key: thumbnailKey }}
 								out:send={{ key: thumbnailOutKey }}
 							/>
 						{/if}
@@ -162,8 +180,8 @@
 	{#if lightboxImageSrc}
 		<img
 			src={lightboxImageSrc}
-			in:receive={{ key: imageKey }}
-			out:send={{ key: imageKey }}
+			in:receive={{ key: thumbnailKey }}
+			out:send={{ key: thumbnailKey }}
 			alt={painting.description}
 		/>
 	{/if}
