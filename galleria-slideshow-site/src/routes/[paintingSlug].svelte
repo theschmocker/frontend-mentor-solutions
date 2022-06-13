@@ -23,9 +23,18 @@
 
 <script lang="ts">
 	import { navigating } from '$app/stores';
-	import { fly } from 'svelte/transition';
+	import { crossfade, fade, fly } from 'svelte/transition';
 
 	export let painting: Painting;
+
+	const [send, receive] = crossfade({
+		duration: 500,
+		fallback(node, params) {
+			return fade(node, { ...params, duration: 500 });
+		}
+	});
+
+	let showLightbox = false;
 </script>
 
 {#key painting.slug}
@@ -42,15 +51,20 @@
 							media="(min-width: 1024px)"
 							srcset={new URL(`../lib/assets/${painting.images.hero.large}`, import.meta.url).href}
 						/>
-						<img
-							class="block absolute inset-0 w-full h-full object-cover"
-							src={new URL(`../lib/assets/${painting.images.hero.small}`, import.meta.url).href}
-							alt=""
-						/>
+						{#if !showLightbox}
+							<img
+								class="block absolute inset-0 w-full h-full object-cover"
+								src={new URL(`../lib/assets/${painting.images.hero.small}`, import.meta.url).href}
+								alt=""
+								in:receive={{ key: painting.slug }}
+								out:send={{ key: painting.slug }}
+							/>
+						{/if}
 					</picture>
 				</div>
 				<button
 					class="flex items-center absolute top-4 left-4 md:top-auto md:bottom-4 bg-black/75 hover:bg-white/25 text-white px-4 py-[14px] uppercase text-[10px] leading-3 tracking-[2.14px]"
+					on:click={() => (showLightbox = true)}
 				>
 					<svg
 						width="12"
@@ -112,8 +126,36 @@
 				class="link-2 md:ml-[115px] lg:ml-0"
 				href={painting.source}
 				rel="noopener noreferrer"
-				target="_blank">Go to Source</a
+				target="_blank"
 			>
+				Go to Source
+			</a>
 		</div>
 	</article>
 {/key}
+
+{#if showLightbox}
+	<div
+		class="fixed inset-0 z-10 flex items-center justify-center px-[95px]"
+		aria-modal="true"
+		role="dialog"
+		aria-label="Lightbox for painting {painting.name}"
+	>
+		<div
+			class="absolute inset-0 bg-black/50"
+			on:click={() => (showLightbox = false)}
+			transition:fade
+		/>
+		<div class="relative z-10 flex flex-col items-end">
+			<button class="link-1 text-white" on:click={() => (showLightbox = false)} transition:fade>
+				Close
+			</button>
+			<img
+				src={new URL(`../lib/assets/${painting.images.gallery}`, import.meta.url).href}
+				alt=""
+				in:receive={{ key: painting.slug }}
+				out:send={{ key: painting.slug }}
+			/>
+		</div>
+	</div>
+{/if}
