@@ -23,11 +23,7 @@
 
 <script lang="ts">
 	import { navigating } from '$app/stores';
-	import { fade, fly } from 'svelte/transition';
-	import { getSlideshowContext } from '$lib/stores/slideshow';
-	import { onMount } from 'svelte';
-
-	const { previousPainting, nextPainting } = getSlideshowContext();
+	import { fly } from 'svelte/transition';
 
 	export let painting: Painting;
 </script>
