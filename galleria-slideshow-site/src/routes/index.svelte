@@ -1,11 +1,9 @@
 <script lang="ts">
-	import { navigating } from '$app/stores';
-
 	import PaintingCard from '$lib/components/PaintingCard.svelte';
 	import { paintings, type Painting } from '$lib/data';
 	import '$lib/stores/media';
 	import { useCurrentBreakpoint } from '$lib/stores/media';
-	import { fade, fly, scale } from 'svelte/transition';
+	import { fade, fly } from 'svelte/transition';
 
 	const breakpoint = useCurrentBreakpoint();
 	$: numColumns = {
@@ -72,8 +70,6 @@
 		col.push(painting);
 		return clms;
 	}, [] as Painting[][]);
-
-	$: console.log($navigating);
 </script>
 
 <div
