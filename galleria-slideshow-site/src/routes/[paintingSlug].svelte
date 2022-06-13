@@ -24,17 +24,43 @@
 <script lang="ts">
 	import { navigating } from '$app/stores';
 	import { crossfade, fade, fly } from 'svelte/transition';
+	import { trapFocus } from '$lib/actions/trap-focus';
 
 	export let painting: Painting;
 
 	const [send, receive] = crossfade({
-		duration: 500,
+		duration: 400,
 		fallback(node, params) {
-			return fade(node, { ...params, duration: 500 });
+			return fade(node, { ...params, duration: 400 });
 		},
 	});
 
-	let showLightbox = false;
+	$: imageKey = painting.slug + '-img';
+
+	// make sure it transitions normally with the rest of the content when changing painting/leaving slideshow
+	$: thumbnailOutKey = imageLoading != null ? imageKey : imageKey + 'out';
+
+	let imageLoading: Promise<string> | null = null;
+	let loading = false;
+
+	async function showLightbox() {
+		loading = true;
+		imageLoading = new Promise<string>((resolve) => {
+			const image = new Image();
+
+			image.onload = () => {
+				loading = false;
+				resolve(new URL(`../lib/assets/${painting.images.gallery}`, import.meta.url).href);
+			};
+
+			image.src = new URL(`../lib/assets/${painting.images.gallery}`, import.meta.url).href;
+		});
+	}
+
+	function hideLightbox() {
+		loading = false;
+		imageLoading = null;
+	}
 </script>
 
 {#key painting.slug}
@@ -51,20 +77,21 @@
 							media="(min-width: 1024px)"
 							srcset={new URL(`../lib/assets/${painting.images.hero.large}`, import.meta.url).href}
 						/>
-						{#if !showLightbox}
+						{#if loading || imageLoading == null}
 							<img
 								class="block absolute inset-0 w-full h-full object-cover"
 								src={new URL(`../lib/assets/${painting.images.hero.small}`, import.meta.url).href}
 								alt=""
-								in:receive={{ key: painting.slug }}
-								out:send={{ key: painting.slug }}
+								in:receive={{ key: imageKey }}
+								out:send={{ key: thumbnailOutKey }}
 							/>
 						{/if}
 					</picture>
 				</div>
 				<button
 					class="flex items-center absolute top-4 left-4 md:top-auto md:bottom-4 bg-black/75 hover:bg-white/25 text-white px-4 py-[14px] uppercase text-[10px] leading-3 tracking-[2.14px]"
-					on:click={() => (showLightbox = true)}
+					disabled={loading}
+					on:click={showLightbox}
 				>
 					<svg
 						width="12"
@@ -134,28 +161,29 @@
 	</article>
 {/key}
 
-{#if showLightbox}
-	<div
-		class="fixed inset-0 z-10 flex items-center justify-center px-[95px]"
-		aria-modal="true"
-		role="dialog"
-		aria-label="Lightbox for painting {painting.name}"
-	>
+{#if imageLoading != null}
+	{#await imageLoading then src}
 		<div
-			class="absolute inset-0 bg-black/50"
-			on:click={() => (showLightbox = false)}
-			transition:fade
-		/>
-		<div class="relative z-10 flex flex-col items-end">
-			<button class="link-1 text-white" on:click={() => (showLightbox = false)} transition:fade>
-				Close
-			</button>
-			<img
-				src={new URL(`../lib/assets/${painting.images.gallery}`, import.meta.url).href}
-				alt=""
-				in:receive={{ key: painting.slug }}
-				out:send={{ key: painting.slug }}
-			/>
+			class="fixed inset-0 z-10 flex items-center justify-center px-6 md:px-12 lg:px-[95px]"
+			aria-modal="true"
+			role="dialog"
+			aria-label="Lightbox for painting {painting.name}"
+			use:trapFocus
+			on:keydown={(e) => {
+				if (e.key === 'Escape') {
+					e.preventDefault();
+					hideLightbox();
+				}
+			}}
+		>
+			<div class="absolute inset-0 bg-black/50" on:click={hideLightbox} transition:fade />
+			<div class="relative z-10 flex flex-col items-end">
+				<button class="link-1 text-white mb-9" on:click={hideLightbox} transition:fade>
+					Close
+				</button>
+				<!-- these images should have alt text -->
+				<img {src} in:receive={{ key: imageKey }} out:send={{ key: imageKey }} />
+			</div>
 		</div>
-	</div>
+	{/await}
 {/if}
