@@ -25,6 +25,7 @@
 	import { navigating } from '$app/stores';
 	import { crossfade, fade, fly } from 'svelte/transition';
 	import { trapFocus } from '$lib/actions/trap-focus';
+	import { getImageSrc, loadImage } from '$lib/util';
 
 	export let painting: Painting;
 
@@ -45,16 +46,9 @@
 
 	async function showLightbox() {
 		loading = true;
-		imageLoading = new Promise<string>((resolve) => {
-			const image = new Image();
-
-			image.onload = () => {
-				loading = false;
-				resolve(new URL(`../lib/assets/${painting.images.gallery}`, import.meta.url).href);
-			};
-
-			image.src = new URL(`../lib/assets/${painting.images.gallery}`, import.meta.url).href;
-		});
+		imageLoading = loadImage(painting.images.gallery);
+		await imageLoading;
+		loading = false;
 	}
 
 	function hideLightbox() {
@@ -73,14 +67,11 @@
 			<div class="relative">
 				<div class="md:w-[69%] lg:w-[55%]">
 					<picture class="relative block pb-[86%] w-full md:pb-[117%]">
-						<source
-							media="(min-width: 1024px)"
-							srcset={new URL(`../lib/assets/${painting.images.hero.large}`, import.meta.url).href}
-						/>
+						<source media="(min-width: 1024px)" srcset={getImageSrc(painting.images.hero.large)} />
 						{#if loading || imageLoading == null}
 							<img
 								class="block absolute inset-0 w-full h-full object-cover"
-								src={new URL(`../lib/assets/${painting.images.hero.small}`, import.meta.url).href}
+								src={getImageSrc(painting.images.hero.small)}
 								alt=""
 								in:receive={{ key: imageKey }}
 								out:send={{ key: thumbnailOutKey }}
