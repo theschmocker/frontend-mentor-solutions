@@ -14,7 +14,7 @@
 		md: 2,
 		lg: 4,
 		xl: 4,
-		'2xl': 4
+		'2xl': 4,
 	}[$breakpoint];
 
 	function getOrdering(nCols: number, paintings: Painting[]): Record<string, number> {
@@ -35,7 +35,7 @@
 					'the-boy-in-the-red-vest': 0,
 					'arnolfini-portrait': 1,
 					'mona-lisa': 0,
-					'the-swing': 1
+					'the-swing': 1,
 				};
 			case 4:
 				return {
@@ -53,7 +53,7 @@
 					'the-boy-in-the-red-vest': 0,
 					'arnolfini-portrait': 1,
 					'mona-lisa': 2,
-					'the-swing': 3
+					'the-swing': 3,
 				};
 		}
 

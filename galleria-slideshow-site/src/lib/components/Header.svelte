@@ -24,10 +24,10 @@
 					fill="black"
 				/>
 			</svg>
-		</h1></a
-	>
+		</h1>
+	</a>
 
-	<button class="link-1 text-[9px]" on:click={toggle}
-		>{$isSlideshowRunning ? 'Stop' : 'Start'} Slideshow</button
-	>
+	<button class="link-1 text-[9px]" on:click={toggle}>
+		{$isSlideshowRunning ? 'Stop' : 'Start'} Slideshow
+	</button>
 </header>

@@ -68,7 +68,7 @@ export function createSlideshowStore() {
 			} else {
 				activePainting.set(paintings[0]);
 			}
-		}
+		},
 	};
 }
 
@@ -84,6 +84,6 @@ export function setSlideshowContext(state: ReturnType<typeof createSlideshowStor
 
 function readonly<T>(writable: Writable<T>): Readable<T> {
 	return {
-		subscribe: writable.subscribe
+		subscribe: writable.subscribe,
 	};
 }

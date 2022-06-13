@@ -72,13 +72,13 @@ To see how you can add code snippets, see below:
 
 ```css
 .proud-of-this-css {
-  color: papayawhip;
+	color: papayawhip;
 }
 ```
 
 ```js
 const proudOfThisFunc = () => {
-  console.log("🎉");
+	console.log('🎉');
 };
 ```
 

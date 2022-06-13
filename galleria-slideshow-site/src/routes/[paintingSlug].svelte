@@ -9,14 +9,14 @@
 		if (!painting) {
 			return {
 				status: 404,
-				error: new Error(`Image ${params.paintingSlug} not found`)
+				error: new Error(`Image ${params.paintingSlug} not found`),
 			};
 		}
 
 		return {
 			props: {
-				painting
-			}
+				painting,
+			},
 		};
 	};
 </script>
@@ -31,7 +31,7 @@
 		duration: 500,
 		fallback(node, params) {
 			return fade(node, { ...params, duration: 500 });
-		}
+		},
 	});
 
 	let showLightbox = false;

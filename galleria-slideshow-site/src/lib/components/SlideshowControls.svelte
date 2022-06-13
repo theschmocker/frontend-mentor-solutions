@@ -30,7 +30,8 @@
 		<div class="py-4 px-6 flex items-center justify-between">
 			<div>
 				<h2 class="subhead-2 text-[14px]">
-					<span class="sr-only">Active painting: </span>{$activePainting.name}
+					<span class="sr-only">Active painting:</span>
+					{$activePainting.name}
 				</h2>
 				<p class="subhead-1 text-[10px] mt-2">{$activePainting.artist.name}</p>
 			</div>
