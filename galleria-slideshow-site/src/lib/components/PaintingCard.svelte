@@ -1,16 +1,12 @@
 <script lang="ts">
 	import type { Painting } from '$lib/data';
+	import { getImageSrc } from '$lib/util';
 
 	export let painting: Painting;
 </script>
 
 <div class="relative">
-	<img
-		class="w-full"
-		src={new URL(`../assets/${painting.images.thumbnail}`, import.meta.url).href}
-		on:load
-		alt=""
-	/>
+	<img class="w-full" src={getImageSrc(painting.images.thumbnail)} on:load alt="" />
 	<div
 		style="background: linear-gradient(180deg, rgba(0, 0, 0, 0.0001) 0%, rgba(0, 0, 0, 0.841672) 100%);"
 		class="absolute inset-0 p-8 flex items-end"

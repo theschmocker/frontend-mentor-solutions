@@ -1,5 +1,5 @@
 export function getImageSrc(image: string): string {
-	return new URL(`./assets/${image}`, import.meta.url).href;
+	return `/assets/${image}`;
 }
 
 export function loadImage(image: string): Promise<string> {

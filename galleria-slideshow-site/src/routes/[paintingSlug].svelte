@@ -124,7 +124,7 @@
 				</div>
 				<img
 					class="h-16 w-16 md:h-32 md:w-32 ml-4 md:ml-auto md:mr-11"
-					src={new URL(`../lib/assets/${painting.artist.image}`, import.meta.url).href}
+					src={getImageSrc(painting.artist.image)}
 					alt=""
 				/>
 			</div>
