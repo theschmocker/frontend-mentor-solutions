@@ -18,7 +18,10 @@ export interface Artist {
 }
 
 export interface Images {
-	thumbnail: string;
+	thumbnail: {
+		image: string;
+		invertedAspectRatio: number;
+	};
 	hero: Hero;
 	gallery: string;
 }

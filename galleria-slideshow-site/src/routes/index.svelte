@@ -1,10 +1,8 @@
 <script lang="ts">
 	import PaintingCard from '$lib/components/PaintingCard.svelte';
 	import { paintings, type Painting } from '$lib/data';
-	import '$lib/stores/media';
 	import { useCurrentBreakpoint } from '$lib/stores/media';
 	import { fade, fly } from 'svelte/transition';
-
 	const breakpoint = useCurrentBreakpoint();
 	$: numColumns = {
 		xs: 1,

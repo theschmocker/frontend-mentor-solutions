@@ -39,21 +39,23 @@
 	$: imageKey = painting.slug + '-img';
 
 	// make sure it transitions normally with the rest of the content when changing painting/leaving slideshow
-	$: thumbnailOutKey = imageLoading != null ? imageKey : imageKey + 'out';
+	$: thumbnailOutKey = lightboxImageSrc != null ? imageKey : imageKey + 'out';
 
-	let imageLoading: Promise<string> | null = null;
+	let lightboxImageSrc: string | null;
 	let loading = false;
 
 	async function showLightbox() {
-		loading = true;
-		imageLoading = loadImage(painting.images.gallery);
-		await imageLoading;
+		const t = setTimeout(() => {
+			loading = true;
+		}, 100);
+		lightboxImageSrc = await loadImage(painting.images.gallery);
+		clearTimeout(t);
 		loading = false;
 	}
 
 	function hideLightbox() {
 		loading = false;
-		imageLoading = null;
+		lightboxImageSrc = null;
 	}
 </script>
 
@@ -68,7 +70,7 @@
 				<div class="md:w-[69%] lg:w-[55%]">
 					<picture class="relative block pb-[86%] w-full md:pb-[117%]">
 						<source media="(min-width: 1024px)" srcset={getImageSrc(painting.images.hero.large)} />
-						{#if loading || imageLoading == null}
+						{#if !lightboxImageSrc}
 							<img
 								class="block absolute inset-0 w-full h-full object-cover"
 								src={getImageSrc(painting.images.hero.small)}
@@ -110,7 +112,11 @@
 						/>
 					</svg>
 
-					View Image
+					{#if loading}
+						Loading...
+					{:else}
+						View Image
+					{/if}
 				</button>
 			</div>
 			<div
@@ -152,29 +158,25 @@
 	</article>
 {/key}
 
-{#if imageLoading != null}
-	{#await imageLoading then src}
-		<div
-			class="fixed inset-0 z-10 flex items-center justify-center px-6 md:px-12 lg:px-[95px]"
-			aria-modal="true"
-			role="dialog"
-			aria-label="Lightbox for painting {painting.name}"
-			use:trapFocus
-			on:keydown={(e) => {
-				if (e.key === 'Escape') {
-					e.preventDefault();
-					hideLightbox();
-				}
-			}}
-		>
-			<div class="absolute inset-0 bg-black/50" on:click={hideLightbox} transition:fade />
-			<div class="relative z-10 flex flex-col items-end">
-				<button class="link-1 text-white mb-9" on:click={hideLightbox} transition:fade>
-					Close
-				</button>
-				<!-- these images should have alt text -->
-				<img {src} in:receive={{ key: imageKey }} out:send={{ key: imageKey }} />
-			</div>
+{#if lightboxImageSrc != null}
+	<div
+		class="fixed inset-0 z-10 flex items-center justify-center px-6 md:px-12 lg:px-[95px]"
+		aria-modal="true"
+		role="dialog"
+		aria-label="Lightbox for painting {painting.name}"
+		use:trapFocus
+		on:keydown={(e) => {
+			if (e.key === 'Escape') {
+				e.preventDefault();
+				hideLightbox();
+			}
+		}}
+	>
+		<div class="absolute inset-0 bg-black/50" on:click={hideLightbox} transition:fade />
+		<div class="relative z-10 flex flex-col items-end">
+			<button class="link-1 text-white mb-9" on:click={hideLightbox} transition:fade>Close</button>
+			<!-- these images should have alt text -->
+			<img src={lightboxImageSrc} in:receive={{ key: imageKey }} out:send={{ key: imageKey }} />
 		</div>
-	{/await}
+	</div>
 {/if}
