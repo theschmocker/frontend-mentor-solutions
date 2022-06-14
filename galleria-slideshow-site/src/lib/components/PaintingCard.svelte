@@ -31,11 +31,12 @@
 				alt=""
 			/>
 		</noscript>
-		<div
-			style="background: linear-gradient(180deg, rgba(0, 0, 0, 0.0001) 0%, rgba(0, 0, 0, 0.841672) 100%);"
-			class="absolute inset-0 p-8 flex items-end"
-		>
-			<a href="/{painting.slug}" class="grid gap-[7px] before:absolute before:inset-0">
+		<div class="flex items-end absolute inset-0">
+			<div
+				class="absolute bottom-0 left-0 right-0 p-8 "
+				style="height: 170px; background: linear-gradient(180deg, rgba(0, 0, 0, 0.0001) 0%, rgba(0, 0, 0, 0.841672) 100%);"
+			/>
+			<a href="/{painting.slug}" class="z-10 grid gap-[7px] p-8 before:absolute before:inset-0">
 				<h2 class="text-white heading-2">{painting.name}</h2>
 				<span class="text-white body">
 					<span class="sr-only">by</span>
