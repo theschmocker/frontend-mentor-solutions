@@ -13,9 +13,7 @@
 				<span class="sr-only">galleria</span>
 				<svg
 					aria-hidden="true"
-					class="w-28"
-					width="114"
-					height="32"
+					class="w-[114px] xl:w-[169px]"
 					viewBox="0 0 114 32"
 					fill="none"
 					xmlns="http://www.w3.org/2000/svg"
@@ -30,7 +28,7 @@
 			</h1>
 		</a>
 
-		<a href="/{$isSlideshowRunning ? '' : paintings[0].slug}" class="link-1 text-[9px]">
+		<a href="/{$isSlideshowRunning ? '' : paintings[0].slug}" class="link-1 text-[9px] xl:text-xs">
 			{$isSlideshowRunning ? 'Stop' : 'Start'} Slideshow
 		</a>
 	</div>
