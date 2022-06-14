@@ -27,18 +27,17 @@
 				class="h-full bg-black origin-left will-change-transform"
 				style="transform: scaleX({$progress});"
 			/>
-			<!-- {$progress} -->
 		</div>
-		<div class="py-4 px-6 flex items-center justify-between">
+		<div class="py-4 px-6 md:py-6 md:px-10 flex items-center justify-between">
 			<div>
-				<h2 class="subhead-2 text-[14px]">
+				<h2 class="subhead-2 text-[14px] md:text-[18px]">
 					<span class="sr-only">Active painting:</span>
 					{painting.name}
 				</h2>
-				<p class="subhead-1 text-[10px] mt-2">{painting.artist.name}</p>
+				<p class="subhead-1 text-[10px] md:text-[13px] mt-2">{painting.artist.name}</p>
 			</div>
 
-			<div class="grid grid-cols-2 gap-6">
+			<div class="grid grid-cols-2 gap-6 md:gap-10">
 				<SlideShowControlsButton
 					on:click={previous}
 					aria-label="Previous painting"

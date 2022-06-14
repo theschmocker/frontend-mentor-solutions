@@ -8,11 +8,10 @@
 	{...$$restProps}
 >
 	<svg
-		width="17"
-		height="16"
 		viewBox="0 0 17 16"
 		fill="none"
 		xmlns="http://www.w3.org/2000/svg"
+		class="w-4 h-4 md:w-6 md:h-6"
 		class:rotate-180={direction === 'previous'}
 	>
 		<path
