@@ -13,7 +13,7 @@ const breakpoints = {
 export type Breakpoint = keyof typeof breakpoints;
 
 export function useCurrentBreakpoint() {
-	const current = writable<Breakpoint>('lg');
+	const current = writable<Breakpoint>('xs');
 	const bps = Object.entries(breakpoints).sort(([_a, minWidthA], [_b, minWidthB]) =>
 		minWidthA < minWidthB ? -1 : minWidthA === minWidthB ? 0 : 1
 	) as [Breakpoint, number][];
