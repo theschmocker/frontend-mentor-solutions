@@ -24,7 +24,7 @@
 <script lang="ts">
 	import { navigating } from '$app/stores';
 	import { crossfade, fade, fly } from 'svelte/transition';
-	import { getImageSrc, loadImage } from '$lib/util';
+	import { getImageSrc, loadImage } from '$lib/util/image';
 	import Lightbox from '$lib/components/Lightbox.svelte';
 	import { getSlideshowContext } from '$lib/stores/slideshow';
 	import { sineOut } from 'svelte/easing';

@@ -1,37 +1,18 @@
 import { type Painting, paintings } from '$lib/data';
-import { derived } from 'svelte/store';
-import { useCurrentBreakpoint } from './media';
 
-export function useGallery() {
-	const breakpoint = useCurrentBreakpoint();
+export function createGallery(columns: number) {
+	const ordering = getOrdering(columns, paintings);
 
-	const columns = derived(breakpoint, ($breakpoint) => {
-		const numColumns = {
-			xs: 1,
-			sm: 1,
-			md: 2,
-			lg: 4,
-			xl: 4,
-			'2xl': 4,
-		}[$breakpoint];
-
-		const ordering = getOrdering(numColumns, paintings);
-
-		return paintings.reduce((clms, painting, i) => {
-			const colNum = ordering[painting.slug];
-			let col = clms[colNum];
-			if (!col) {
-				col = [];
-				clms[colNum] = col;
-			}
-			col.push(painting);
-			return clms;
-		}, [] as Painting[][]);
-	});
-
-	return {
-		columns,
-	};
+	return paintings.reduce((clms, painting) => {
+		const colNum = ordering[painting.slug];
+		let col = clms[colNum];
+		if (!col) {
+			col = [];
+			clms[colNum] = col;
+		}
+		col.push(painting);
+		return clms;
+	}, [] as Painting[][]);
 }
 
 function getOrdering(nCols: number, paintings: Painting[]): Record<string, number> {

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Painting } from '$lib/data';
-	import { getImageSrc, loadImage } from '$lib/util';
+	import { getImageSrc, loadImage } from '$lib/util/image';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 
@@ -24,6 +24,13 @@
 				in:fade|local
 			/>
 		{/if}
+		<noscript>
+			<img
+				class="w-full h-full absolute inset-0 object-cover"
+				src={getImageSrc(painting.images.thumbnail.image)}
+				alt=""
+			/>
+		</noscript>
 		<div
 			style="background: linear-gradient(180deg, rgba(0, 0, 0, 0.0001) 0%, rgba(0, 0, 0, 0.841672) 100%);"
 			class="absolute inset-0 p-8 flex items-end"
