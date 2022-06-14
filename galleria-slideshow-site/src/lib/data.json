@@ -224,7 +224,7 @@
 		"slug": "mona-lisa",
 		"artist": { "image": "mona-lisa/artist.jpg", "name": "Leonardo da Vinci" },
 		"images": {
-			"thumbnail": { "image": "mona-lisa/thumbnail.jpg", "invertedAspectRatio": 155.5 },
+			"thumbnail": { "image": "mona-lisa/thumbnail.jpg", "invertedAspectRatio": 162.5 },
 			"hero": { "small": "mona-lisa/hero-small.jpg", "large": "mona-lisa/hero-large.jpg" },
 			"gallery": "mona-lisa/gallery.jpg"
 		}
