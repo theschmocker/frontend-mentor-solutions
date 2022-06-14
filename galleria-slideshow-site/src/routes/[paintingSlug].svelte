@@ -28,6 +28,7 @@
 	import Lightbox from '$lib/components/Lightbox.svelte';
 	import { getSlideshowContext } from '$lib/stores/slideshow';
 	import { sineOut } from 'svelte/easing';
+	import { browser } from '$app/env';
 
 	export let painting: Painting;
 
@@ -105,7 +106,9 @@
 						{/if}
 					</picture>
 				</div>
-				<button
+				<svelte:element
+					this={browser ? 'button' : 'a'}
+					href={browser ? undefined : getImageSrc(painting.images.gallery)}
 					class="flex items-center absolute top-4 left-4 md:top-auto md:bottom-4 bg-black/75 hover:bg-white/25 text-white px-4 py-[14px] uppercase text-[10px] leading-3 tracking-[2.14px]"
 					disabled={loading}
 					on:click={showLightbox}
@@ -141,7 +144,7 @@
 					{:else}
 						View Image
 					{/if}
-				</button>
+				</svelte:element>
 			</div>
 			<div
 				class="relative -mt-[50px] md:absolute md:mt-0 md:top-0 md:right-0 md:max-w-[65%] lg:max-w-[52%]"
