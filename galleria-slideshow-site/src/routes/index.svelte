@@ -7,6 +7,11 @@
 	const large = createGallery(4);
 </script>
 
+<svelte:head>
+	<title>galleria</title>
+	<meta name="description" content="galleria, a project for frontendmentor.io" />
+</svelte:head>
+
 <Gallery class="md:hidden" columns={small} />
 <Gallery class="hidden md:grid lg:hidden" columns={medium} />
 <Gallery class="hidden lg:grid" columns={large} />

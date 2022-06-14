@@ -78,6 +78,11 @@
 	};
 </script>
 
+<svelte:head>
+	<title>{painting.name} | galleria</title>
+	<meta name="description" content={painting.description} />
+</svelte:head>
+
 {#key painting.slug}
 	<article
 		class="p-6 md:p-10 lg:mt-[100px] lg:grid lg:grid-cols-[63%_1fr] lg:gap-[30px] max-w-[1440px] mx-auto"
