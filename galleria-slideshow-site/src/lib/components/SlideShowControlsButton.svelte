@@ -1,10 +1,21 @@
 <script lang="ts">
 	export let direction: 'previous' | 'next';
+	export let href = '';
+	export let disabled = false;
+
+	$: el = href ? 'a' : 'button';
 </script>
 
-<button
+<svelte:element
+	this={el}
+	href={href || null}
 	on:click
-	class="text-black hover:opacity-50 disabled:opacity-[0.15] disabled:cursor-not-allowed transition-opacity"
+	class="text-black transition-opacity"
+	{disabled}
+	aria-disabled={disabled}
+	class:opacity-[0.15]={disabled}
+	class:cursor-not-allowed={disabled}
+	class:hover:opacity-50={!disabled}
 	{...$$restProps}
 >
 	<svg
@@ -30,4 +41,4 @@
 			stroke-width="0.495304"
 		/>
 	</svg>
-</button>
+</svelte:element>

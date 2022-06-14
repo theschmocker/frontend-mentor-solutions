@@ -5,11 +5,11 @@
 	import { paintings } from '$lib/data';
 	import SlideShowControlsButton from './SlideShowControlsButton.svelte';
 
-	const { activePainting, next, nextPainting, previous, previousPainting } = getSlideshowContext();
+	const { activePainting, nextPainting, previousPainting } = getSlideshowContext();
 
 	const progress = spring(0);
 
-	$: painting = $activePainting?.current;
+	$: painting = $activePainting;
 
 	$: if (painting) {
 		progress.set((paintings.indexOf(painting) + 1) / paintings.length);
@@ -39,15 +39,17 @@
 
 			<div class="grid grid-cols-2 gap-6 md:gap-10">
 				<SlideShowControlsButton
-					on:click={previous}
+					href="/{$previousPainting ? $previousPainting.slug : painting.slug}"
 					aria-label="Previous painting"
 					disabled={!$previousPainting}
+					aria-disabled={!$previousPainting}
 					direction="previous"
 				/>
 				<SlideShowControlsButton
-					on:click={next}
+					href="/{$nextPainting ? $nextPainting.slug : painting.slug}"
 					aria-label="Next painting"
 					disabled={!$nextPainting}
+					aria-disabled={!$nextPainting}
 					direction="next"
 				/>
 			</div>

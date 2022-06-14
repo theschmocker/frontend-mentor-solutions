@@ -59,9 +59,10 @@
 		lightboxImageSrc = null;
 	}
 
-	const { activePainting, previousPainting } = getSlideshowContext();
+	const { nextPainting } = getSlideshowContext();
+
 	$: goingToOrFromList = $navigating?.from.pathname === '/' || $navigating?.to.pathname === '/';
-	$: movingForward = $activePainting.previous === $previousPainting;
+	$: movingForward = painting === $nextPainting;
 	$: transition = {
 		in: {
 			delay: goingToOrFromList ? 400 : 425,

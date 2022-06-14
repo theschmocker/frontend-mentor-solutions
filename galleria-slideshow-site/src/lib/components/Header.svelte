@@ -1,7 +1,9 @@
 <script lang="ts">
+	import { paintings } from '$lib/data';
+
 	import { getSlideshowContext } from '$lib/stores/slideshow';
 
-	const { isSlideshowRunning, toggle } = getSlideshowContext();
+	const { isSlideshowRunning } = getSlideshowContext();
 </script>
 
 <header class="">
@@ -28,9 +30,9 @@
 			</h1>
 		</a>
 
-		<button class="link-1 text-[9px]" on:click={toggle}>
+		<a href="/{$isSlideshowRunning ? '' : paintings[0].slug}" class="link-1 text-[9px]">
 			{$isSlideshowRunning ? 'Stop' : 'Start'} Slideshow
-		</button>
+		</a>
 	</div>
 	<div class="after:block after:bg-gray-200 after:h-[1px] lg:px-10" />
 </header>
