@@ -163,6 +163,7 @@
 			<div
 				class="heading-display text-[100px] text-right md:text-[200px] md:text-left lg:text-[150px] xl:text-[200px] select-none"
 			>
+				<span class="sr-only">Painted in</span>
 				{painting.year}
 			</div>
 			<div
