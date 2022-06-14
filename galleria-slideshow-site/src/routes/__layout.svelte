@@ -8,11 +8,13 @@
 	const { isSlideshowRunning } = slideshowStore;
 
 	setSlideshowContext(slideshowStore);
+
+	$: controlPadding = $isSlideshowRunning ? 'pb-20 md:pb-[96px]' : '';
 </script>
 
 <Header />
 
-<main class:pb-20={$isSlideshowRunning}>
+<main class={controlPadding}>
 	<slot />
 	<SlideshowControls />
 </main>
